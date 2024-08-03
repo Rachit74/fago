@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %} FaGo | Home {% endblock %}
+
+{% block content %}
+
+<div class="blog">
+    <h2>Blogs</h2>
+    {% if blogs %}
+        {% for blog in blogs %}
+            <div class="blog-entry">
+                <div class="blog-id">Blog ID: {{ blog.id }}</div>
+                <div class="blog-title"><a href="">{{ blog.title }}</a></div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+
+{% endblock %}

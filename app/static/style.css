@@ -1,0 +1,104 @@
+/* Reset default margin and padding for the body */
+body {
+margin: 0;
+padding: 0;
+background-color: #f9f9f9;
+}
+
+/* Navbar container */
+.navbar {
+background-color: #333; /* Background color */
+overflow: hidden;      /* Clear floats */
+width: 100%;           /* Full width */
+}
+
+/* Navbar list items */
+.navbar ul {
+list-style-type: none; /* Remove default list style */
+margin: 0;             /* Remove default margin */
+padding: 0;            /* Remove default padding */
+display: flex;         /* Flex layout */
+align-items: center;   /* Align items vertically */
+}
+
+/* Logo text */
+.navbar .fago {
+color: white;          /* Text color */
+padding: 14px 20px;    /* Spacing */
+font-size: 24px;       /* Font size */
+}
+
+/* Navbar links container (pushes to the right) */
+.navbar .nav-links {
+margin-left: auto;     /* Pushes links to the right */
+display: flex;         /* Flex layout for links */
+}
+
+/* Navbar links */
+.navbar .nav-links li {
+display: inline;       /* Display list items in a row */
+}
+
+.navbar .nav-links li a {
+display: block;             /* Make links block-level elements */
+color: white;               /* Text color */
+text-align: center;         /* Center text */
+padding: 14px 20px;         /* Padding for spacing */
+text-decoration: none;      /* Remove underline */
+transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+/* Change color on hover */
+.navbar .nav-links li a:hover {
+background-color: #575757; /* Hover background color */
+}
+
+.blog {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .blog h2 {
+    text-align: center;
+    color: #333;
+  }
+
+  .blog-entry {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0;
+  }
+
+  .blog-entry:last-child {
+    border-bottom: none;
+  }
+
+  .blog-id {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 5px;
+  }
+
+  .blog-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .blog-content {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  .blog-title a{
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    text-decoration: none;
+  }
