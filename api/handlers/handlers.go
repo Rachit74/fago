@@ -73,3 +73,11 @@ func DeleteBlogHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusNoContent)
 }
+
+// RegisterRoutes sets up the routes for blog operations
+func RegisterRoutes(r *mux.Router) {
+	r.HandleFunc("/blogs", CreateBlogHandler).Methods("POST")
+	r.HandleFunc("/blogs/{id:[0-9]+}", GetBlogHandler).Methods("GET")
+	r.HandleFunc("/blogs", GetBlogsHandler).Methods("GET")
+	r.HandleFunc("/blogs/{id:[0-9]+}", DeleteBlogHandler).Methods("DELETE")
+}
