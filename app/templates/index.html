@@ -9,8 +9,8 @@
     {% if blogs %}
         {% for blog in blogs %}
             <div class="blog-entry">
-                <div class="blog-id">Blog ID: {{ blog.id }}</div>
-                <div class="blog-title"><a href="">{{ blog.title }}</a></div>
+                <div class="blog-id">Blog ID: {{ blog.ID }}</div>
+                <div class="blog-title"><a href="{{ url_for('views.blog', id=blog.ID) }}">{{ blog.Title }}</a></div>
             </div>
         {% endfor %}
     {% endif %}
