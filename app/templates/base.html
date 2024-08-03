@@ -11,10 +11,10 @@
     <!-- navbar -->
      <div class="navbar">
         <ul>
-            <li class="fago">FaGo</li>
+            <a href="/"><li class="fago">FaGo</li></a>
             <div class="nav-links">
-              <li><a href="">Home</a></li>
-              <li><a href="">Write</a></li>
+              <li><a href="{{ url_for('views.index') }}">Home</a></li>
+              <li><a href="{{ url_for('views.write_blog') }}">Write</a></li>
             </div>
         </ul>
      </div>
@@ -22,6 +22,8 @@
     {% block content %}
 
     {% endblock %}
+
+    <script src="../static/script.js"></script>
 
 </body>
 </html>

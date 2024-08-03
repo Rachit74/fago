@@ -40,3 +40,11 @@ def blog(id):
     else:
         return "Blog not found", 404
     return render_template("blog.html", blog=blog)
+
+@views.route("/delete/<int:id>", methods=["GET"])
+def delete_blog(id):
+    response = requests.delete(f"{API_URL}/blogs/{id}")
+    if response.status_code == 204:
+        return redirect(url_for('views.index'))
+    else:
+        return "Blog not found", 404
