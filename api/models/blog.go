@@ -1,7 +1,11 @@
 package models
 
+import (
+	"gorm.io/gorm"
+)
+
 type Blog struct {
-	ID      int    `json:"blog_id"`
-	Title   string `json:"blog_title"`
-	Content string `json:"blog_content"`
+	gorm.Model // ID, CreatedAt, UpdatedAt is in gorm by default
+	Title      string
+	Content    string
 }
