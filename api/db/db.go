@@ -22,6 +22,10 @@ func InitDB() {
 	if err != nil {
 		panic("Failed to migrate database: " + err.Error())
 	}
+	err = DB.AutoMigrate(&models.User{})
+	if err != nil {
+		panic("Failed to migrate database: " + err.Error())
+	}
 }
 
 // CreateBlog creates a new blog entry in the database
@@ -65,5 +69,38 @@ func DeleteBlog(id uint) error {
 		return errors.New("database not initialized")
 	}
 	result := DB.Delete(&models.Blog{}, id)
+	return result.Error
+}
+
+// user db functions
+
+// function to create a new user
+func CreateUserSignup(user *models.User) error {
+	if DB == nil {
+		return errors.New("database not initialized")
+	}
+	result := DB.Create(&user)
+	return result.Error
+}
+
+// function to get all users
+// func GetUsers() ([]models.User, error) {
+// 	if DB == nil {
+// 		return nil, errors.New("database not initialized")
+// 	}
+// 	var users []models.User
+// 	result := DB.Find(&users)
+// 	if result.Error != nil {
+// 		return nil, result.Error
+// 	}
+// 	return users, nil
+// }
+
+func GetUserLogin(user_email string, user_password string) error {
+	if DB == nil {
+		return errors.New("database error")
+	}
+
+	result := DB.Where("Email = ?, Password = ?", user_email, user_password)
 	return result.Error
 }

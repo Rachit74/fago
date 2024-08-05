@@ -74,10 +74,32 @@ func DeleteBlogHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+func SignupUser(w http.ResponseWriter, r *http.Request) {
+	var user models.User
+	err := json.NewDecoder(r.Body).Decode(&user)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = db.CreateUserSignup(&user)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(&user)
+}
+
 // RegisterRoutes sets up the routes for blog operations
 func RegisterRoutes(r *mux.Router) {
 	r.HandleFunc("/blogs", CreateBlogHandler).Methods("POST")
 	r.HandleFunc("/blogs/{id:[0-9]+}", GetBlogHandler).Methods("GET")
 	r.HandleFunc("/blogs", GetBlogsHandler).Methods("GET")
 	r.HandleFunc("/blogs/{id:[0-9]+}", DeleteBlogHandler).Methods("DELETE")
+
+	// user handler functions
+	r.HandleFunc("/signup", SignupUser).Methods("POST")
 }
