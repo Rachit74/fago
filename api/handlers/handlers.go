@@ -93,6 +93,31 @@ func SignupUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&user)
 }
 
+func LoginUser(w http.ResponseWriter, r *http.Request) {
+
+	// login struct
+	type LoginRequest struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	var loginreq LoginRequest
+	if err := json.NewDecoder(r.Body).Decode(&loginreq); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	user_email := loginreq.Email
+	user_password := loginreq.Password
+
+	user, err := db.GetUserLogin(user_email, user_password)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(&user)
+}
+
 // RegisterRoutes sets up the routes for blog operations
 func RegisterRoutes(r *mux.Router) {
 	r.HandleFunc("/blogs", CreateBlogHandler).Methods("POST")
@@ -102,4 +127,5 @@ func RegisterRoutes(r *mux.Router) {
 
 	// user handler functions
 	r.HandleFunc("/signup", SignupUser).Methods("POST")
+	r.HandleFunc("/login", LoginUser).Methods("GET")
 }

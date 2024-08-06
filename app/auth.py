@@ -22,3 +22,23 @@ def signup():
             return "Error creating blog", response.status_code
 
     return render_template("signup.html")
+
+@auth.route("/login", methods=["POST", "GET"])
+def login():
+    if request.method == "POST":
+        email = request.form.get("useremail")
+        password = request.form.get("userpassword")
+
+        response = requests.get(f"{API_URL}/login", json={
+            "email" : email,
+            "password" : password
+            }
+                                )
+        if response.status_code == 200:
+            user = response.json()
+            print(user)
+        else:
+            error = response.json().get('error', 'Invalid email or password')
+            print(error)
+
+    return render_template("login.html")

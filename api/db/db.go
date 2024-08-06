@@ -3,6 +3,7 @@ package db
 import (
 	"errors"
 	"fago_api/models"
+	"log"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -96,11 +97,19 @@ func CreateUserSignup(user *models.User) error {
 // 	return users, nil
 // }
 
-func GetUserLogin(user_email string, user_password string) error {
+func GetUserLogin(user_email string, user_password string) (*models.User, error) {
 	if DB == nil {
-		return errors.New("database error")
+		return nil, errors.New("database error")
 	}
 
-	result := DB.Where("Email = ?, Password = ?", user_email, user_password)
-	return result.Error
+	var user models.User
+
+	log.Printf("Querying for user with email: %s and password: %s", user_email, user_password)
+
+	result := DB.First(&user, "email = ? AND password = ?", user_email, user_password)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &user, nil
 }
