@@ -1,0 +1,38 @@
+{% extends "posts/base.html" %}
+{% block title %}FaGo | Home{% endblock %}
+
+{% block content %}
+<div class="layout">
+    <header class="main-header">
+        <div class="header-content">
+            <h1 class="site-title">FaGo</h1>
+            <nav class="main-nav">
+                <a href="" class="nav-link">Home</a>
+                <a href="" class="nav-link">Login</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="main-content">
+        <div class="timeline">
+            {% for post in posts %}
+            <div class="status">
+                <div class="status-header">
+                    <span class="display-name">User Name</span>
+                    <span class="username">@username</span>
+                </div>
+                <div class="status-content">
+                    <h3 class="status-title"><a href="">{{ post.title }}</a></h3>
+                    <p class="status-text">{{ post.content }}</p>
+                </div>
+                <div class="status-actions">
+                    <button class="action-button">Reply</button>
+                    <button class="action-button">Boost</button>
+                    <button class="action-button">Favorite</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+{% endblock %}
