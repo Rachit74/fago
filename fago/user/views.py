@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .forms import UserRegistrationForm
 
 # Create your views here.
 
@@ -15,3 +16,12 @@ def user_profile(request):
     }
 
     return render(request, 'user/profile.html', context=context)
+
+# User Registration
+def register_user(request):
+    form = UserRegistrationForm()
+
+    context = {
+        'form':form
+    }
+    return render(request, 'user/register.html', context=context)

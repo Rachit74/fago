@@ -10,8 +10,20 @@
     <title>{% block title %} {% endblock %}</title>
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+
+    <div class="layout">
+        <header class="main-header">
+            <div class="header-content">
+                <h1 class="site-title">FaGo</h1>
+                <nav class="main-nav">
+                    <a href="{% url 'home' %}" class="nav-link">Home</a>
+                    <a href="{% url 'register' %}" class="nav-link">Login</a>
+                </nav>
+            </div>
+        </header>
+        {% block content %}
+        {% endblock %}
+    </div>
 
     <script src="{% static 'js/script.js' %}"></script>
 </body>

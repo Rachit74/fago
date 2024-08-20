@@ -1,0 +1,17 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} Register {% endblock %}
+
+{% block content %}
+<main>
+    <div class="profile-card">
+        <h2 class="display-name">Register</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="edit-profile-btn">Register</button>
+        </form>
+    </div>
+</main>
+
+{% endblock %}

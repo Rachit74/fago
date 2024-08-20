@@ -1,21 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Sedan:ital@0;1&display=swap');
+
+* {
+    font-family: "Nanum Gothic", sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
     background-color: #282c37;
     color: #fff;
     margin: 0;
     padding: 0;
+    line-height: 1.6;
 }
 
 .layout {
     max-width: 990px;
     margin: 0 auto;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .main-header {
     background-color: #313543;
     padding: 10px 0;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+    width: 100%;
 }
 
 .header-content {
@@ -29,7 +39,7 @@ body {
 
 .site-title {
     font-size: 24px;
-    color: #2b90d9;
+    color: #e74404;
     margin: 0;
 }
 
@@ -77,7 +87,7 @@ body {
     margin: 0 0 10px 0;
 }
 
-.status-title a{
+.status-title a {
     text-decoration: none;
     color: white;
 }
@@ -103,16 +113,15 @@ body {
 }
 
 .action-button:hover {
-    background-color: #2b90d9;
-    border-color: #2b90d9;
+    background-color: #e74404;
+    border-color: #e74404;
     color: #fff;
 }
 
-/* Profile card styles */
 .profile-card {
     background-color: #313543;
     border-radius: 8px;
-    padding: 20px;
+    padding: 30px;
     width: 100%;
     max-width: 500px;
     position: relative;
@@ -141,6 +150,8 @@ body {
     font-size: 24px;
     font-weight: bold;
     margin: 0;
+    text-align: center;
+    color: #e74404;
 }
 
 .username {
@@ -170,7 +181,7 @@ body {
 }
 
 .edit-profile-btn {
-    background-color: #2b90d9;
+    background-color: #e74404;
     color: #fff;
     border: none;
     padding: 10px 15px;
@@ -179,8 +190,104 @@ body {
     font-size: 16px;
     margin-top: 20px;
     width: 100%;
+    transition: background-color 0.2s;
 }
 
 .edit-profile-btn:hover {
     background-color: #2b7fba;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form p {
+    margin-bottom: 15px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #9baec8;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #505050;
+    background-color: #222;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+form input[type="file"] {
+    padding: 5px;
+}
+
+.errorlist {
+    color: #ff5555;
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 0 0;
+    font-size: 14px;
+}
+
+.helptext {
+    font-size: 14px;
+    color: #9baec8;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Add these styles to the end of your CSS file */
+
+/* Specific styles for the registration form */
+.profile-card.register-form {
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+.profile-card.register-form .display-name {
+    margin-bottom: 20px;
+}
+
+.profile-card.register-form form {
+    width: 100%;
+}
+
+.profile-card.register-form form p {
+    margin-bottom: 15px;
+}
+
+.profile-card.register-form form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #9baec8;
+}
+
+.profile-card.register-form form input[type="text"],
+.profile-card.register-form form input[type="email"],
+.profile-card.register-form form input[type="password"],
+.profile-card.register-form form input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #505050;
+    background-color: #222;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.profile-card.register-form form input[type="file"] {
+    padding: 5px;
+}
+
+.profile-card.register-form .edit-profile-btn {
+    margin-top: 10px;
 }

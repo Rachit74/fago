@@ -1,18 +1,7 @@
 {% extends "posts/base.html" %}
 {% block title %}FaGo | Home{% endblock %}
 
-{% block content %}
-<div class="layout">
-    <header class="main-header">
-        <div class="header-content">
-            <h1 class="site-title">FaGo</h1>
-            <nav class="main-nav">
-                <a href="" class="nav-link">Home</a>
-                <a href="" class="nav-link">Login</a>
-            </nav>
-        </div>
-    </header>
-    
+{% block content %}    
     <main class="main-content">
         <div class="timeline">
             {% for post in posts %}
@@ -35,5 +24,4 @@
             {% endfor %}
         </div>
     </main>
-</div>
 {% endblock %}
