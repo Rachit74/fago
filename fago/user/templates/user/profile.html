@@ -3,20 +3,20 @@
 {% block title %} FaGo | {{ user.username }} {% endblock %}
 
 {% block content %}
-<!-- Profile Card -->
 <div class="profile-card">
-    <img src="https://via.placeholder.com/120" alt="Profile Picture" class="profile-picture">
-    <div class="profile-info">
-        <h2 class="display-name">John Doe</h2>
-        <p class="username">@johndoe</p>
-        <p class="user-id">User ID: 123456789</p>
-    </div>
-
-    <div class="bio">
-        <h3 class="bio-title">About Me</h3>
-        <p>This is a sample bio. Users can write about themselves, their interests, or anything they want to share with others. This section can be expanded or customized based on your specific needs.</p>
-    </div>
-
-    <button class="edit-profile-btn">Edit Profile</button>
-</div>
+   <div class="profile-header">
+     <img src="{{ user.userprofile.profile_picture.url }}" alt="img" class="profile-picture">
+     <div class="profile-info">
+       <h1>{{ user.first_name }}</h1>
+       <h2>@{{ user.username }}</h2>
+       <p>{{ user.email }}</p>
+       <button class="edit-profile-btn"><a href="{% url 'edit-profile' %}">Edit profile</a></button>
+     </div>
+   </div>
+   <div class="profile-bio">
+     <h2>Bio</h2>
+     <!-- <p>{{ user.userprofile.bio }}</p> -->
+      <p>{{ user.userprofile.profile_bio }}</p>
+   </div>
+ </div>
 {% endblock %}
