@@ -47,6 +47,7 @@ def read_post(request, post_id):
             comment.comment_author = request.user
             comment.save()
             messages.info(request, 'Comment Added!')
+            return redirect('read-post', post_id=post.id)
     else:
         form = CommentForm()
     
