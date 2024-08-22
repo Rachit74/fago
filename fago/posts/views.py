@@ -1,12 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import CreatePostForm
-from .models import Post
+from .forms import CreatePostForm, CommentForm
+from .models import Post, Comment
 
 # Create your views here.
 def home(request):
-    posts = Post.objects.all()
+    posts = Post.objects.order_by('-posted_at')
     context = {
         'posts': posts
     }
@@ -30,3 +30,31 @@ def create_post(request):
     }
     
     return render(request, 'posts/create_post.html', context=context)
+
+# Read a post
+"""
+Also handles the comment logic
+"""
+def read_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    # checking the type of request for comment
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.comment_author = request.user
+            comment.save()
+            messages.info(request, 'Comment Added!')
+    else:
+        form = CommentForm()
+    
+    comments = Comment.objects.filter(post=post).all()
+    context = {
+        'post':post,
+        'comments':comments,
+        'form': form,
+    }
+
+    return render(request, 'posts/read_post.html', context=context)

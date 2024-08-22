@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://b9413f13-38dd-4173-8b01-4f25a860cb83-00-3ka7vl8hhg4q9.pike.replit.dev/',
+    # requried when working on repl
     'https://b9413f13-38dd-4173-8b01-4f25a860cb83-00-3ka7vl8hhg4q9.pike.replit.dev'
 ]
 
@@ -143,3 +143,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 PROFILE_PICS_DIR = 'profile_pics'
 POSTS_PICS_DIR = 'posts_pics'
 COMMUNITY_BANNER_DIR = 'community_banners'
+
+LOGIN_URL = 'login'

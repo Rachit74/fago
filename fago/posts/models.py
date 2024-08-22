@@ -6,8 +6,6 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 # Post Model
-
-
 class Post(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
@@ -16,3 +14,10 @@ class Post(models.Model):
                               null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     posted_at = models.DateTimeField(timezone.now, default=timezone.now)
+
+
+# Comment Model
+class Comment(models.Model):
+    comment = models.TextField(max_length=500)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    comment_author = models.ForeignKey(User, on_delete=models.CASCADE)

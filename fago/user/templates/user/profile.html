@@ -5,7 +5,11 @@
 {% block content %}
 <div class="profile-card">
    <div class="profile-header">
-     <img src="{{ user.userprofile.profile_picture.url }}" alt="img" class="profile-picture">
+    {% if user.userprofile.profile_picture %}
+    <img src="{{ user.userprofile.profile_picture.url }}" alt="img" class="profile-picture">
+    {% else %}
+    <img src="" alt="img" class="profile-picture">
+    {% endif %}
      <div class="profile-info">
        <h1>{{ user.first_name }}</h1>
        <h2>@{{ user.username }}</h2>
