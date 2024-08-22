@@ -12,7 +12,8 @@
                     <span>{{ post.author.first_name }}</span>
                 </div>
                 {% load humanize %}
-                <span class="post-time">{{ post.posted_at|naturaltime }}</span>
+                <span class="post-time">{{ post.posted_at|naturaltime }}</span><br>
+                <span>Community: {{ post.community }}</span>
             </div>
             
             {% if post.image %}
@@ -52,6 +53,8 @@
                             <img src="{{ comment.comment_author.userprofile.profile_picture.url }}" alt="Commenter profile picture">
                             <span>{{ comment.comment_author }}</span>
                         </div>
+                        {% load humanize %}
+                        <span>{{ comment.comment_at|naturaltime }}</span>
                         <div class="comment-content">
                             {{ comment.comment }}
                         </div>                        

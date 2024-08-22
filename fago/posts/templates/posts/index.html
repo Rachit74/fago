@@ -14,7 +14,8 @@
                         <span>{{ post.author.first_name }}</span>
                     </div>
                     {% load humanize %}
-                    <span class="post-time">{{ post.posted_at|naturaltime }}</span>
+                    <span class="post-time">{{ post.posted_at|naturaltime }}</span><br>
+                    Community: <span>c/{{ post.community }}</span><br>
                 </div>
                 
                 {% if post.image %}

@@ -17,11 +17,13 @@ def explore(request):
 # view community method (one particular community)
 def community(request, community_id):
     community = get_object_or_404(Community, id=community_id)
+    posts = community.posts.all()
     members = community.members.all()
 
     context = {
         'community': community,
         'members': members,
+        'posts': posts,
     }
 
     return render(request, 'communities/community.html', context=context)

@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
+from communities.models import Community
 
 # Create your models here.
 
@@ -14,6 +15,7 @@ class Post(models.Model):
                               null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     posted_at = models.DateTimeField(timezone.now, default=timezone.now)
+    community = models.ForeignKey(Community, related_name='posts', on_delete=models.CASCADE, default=None, null=True)
 
 
 # Comment Model
@@ -21,3 +23,4 @@ class Comment(models.Model):
     comment = models.TextField(max_length=500)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     comment_author = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment_at = models.DateTimeField(timezone.now, default=timezone.now)

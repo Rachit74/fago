@@ -16,7 +16,7 @@ def home(request):
 @login_required
 def create_post(request):
     if request.method == "POST":
-        form = CreatePostForm(request.POST, request.FILES)
+        form = CreatePostForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
@@ -24,7 +24,7 @@ def create_post(request):
             messages.success(request, 'Post Created!')
             return redirect('home')
     else:
-        form = CreatePostForm()    
+        form = CreatePostForm(user=request.user)    
     context = {
         'form': form
     }
@@ -50,7 +50,7 @@ def read_post(request, post_id):
     else:
         form = CommentForm()
     
-    comments = Comment.objects.filter(post=post).all()
+    comments = Comment.objects.filter(post=post).order_by('-comment_at').all()
     context = {
         'post':post,
         'comments':comments,
