@@ -55,13 +55,15 @@ body {
     text-decoration: none;
 }
 
-.posts {
+/* .posts {
     border-style: solid;
-}
+} */
 
 .post {
-    border-style: dotted;
     margin: 20px;
+    background-color: #13171d;
+    padding: 10px;
+    border-radius: 20px;
 }
 
 .register-form {
@@ -399,4 +401,11 @@ textarea {
 
 .form-footer a:hover {
     text-decoration: underline;
+}
+
+.post-user img{
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 20px;
 }

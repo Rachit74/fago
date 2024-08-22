@@ -1,0 +1,26 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} Communitites {% endblock %}
+
+{% block content %}
+
+<div class="communities-expore">
+    <div class="communities-header">
+        <h2>Explore Communities</h2>
+        <div class="c-actions">
+            <div class="btn">
+                <a href="">Create Community</a>
+            </div>
+        </div>
+    </div>
+    {% for c in communities %}
+    <div class="community">
+        <div class="community-header">
+            <h3>{{ c.name }}</h3>
+            <p>{{ c.desc }}</p>
+        </div>
+    </div>
+    {%  endfor %}
+</div>
+
+{% endblock %}
