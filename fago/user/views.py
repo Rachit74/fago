@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm, UserLoginForm, EditProfileForm
 from .models import UserProfile
 from django.contrib.auth.models import User
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 
 # Create your views here.
@@ -26,7 +26,8 @@ def register_user(request):
         #checks if the form is valid
         if form.is_valid():
             form.save()
-            print("USER CREATED!")
+            messages.success(request, "Account Created!")
+            return redirect('login')
     else:
         form = UserRegistrationForm()
 
@@ -46,6 +47,7 @@ def login_user(request):
             user = authenticate(username=username, password = password)
             login(request, user)
 
+            messages.success(request, "Logged In!")
             return redirect('user_profile')
     else:
         form = UserLoginForm()
@@ -55,10 +57,28 @@ def login_user(request):
     }
     return render(request, 'user/login.html', context=context)
 
+# User Logout
+def logout_user(request):
+    logout(request)
+
+    messages.warning(request,"Logged Out!")
+    return redirect('login')
+
 # Edit User Profile
 def edit_user_profile(request):
     user = request.user
-    user_profile = UserProfile.objects.get(user=user)
+    """
+    Before getting the user profile of any user we need to create their profile first
+    which can be done using get_or_create()
+    """
+    # user_profile = UserProfile.objects.get(user=user) #this gives error as the user profile which is not created can not be extracted
+    
+    #get_or_create()
+    user_profile, created = UserProfile.objects.get_or_create(user=user)
+
+    if created:
+        messages.info(request, "A new user profile was created")
+
     if request.method == "POST":
         form = EditProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
@@ -66,7 +86,7 @@ def edit_user_profile(request):
             messages.success(request, "Profile Updated!")
             return redirect('user_profile')
     else:
-        form = EditProfileForm()
+        form = EditProfileForm(instance=user_profile)
 
     context = {
         'form': form
