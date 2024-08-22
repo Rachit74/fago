@@ -1,13 +1,15 @@
 {% extends "posts/base.html" %}
 {% block title %}FaGo | Home{% endblock %}
 
-{% block content %}    
+{% block content %}
 <main>
     <div class="posts">
         {% for post in posts %}
         <div class="post">
             <div class="post-title">
                 <h2 class="post-title">{{ post.title }}</h2>
+                {% load humanize %}
+                {{ post.posted_at|naturaltime }}
             </div>
             {% if post.image %}
             <div class="post-image">
@@ -21,7 +23,8 @@
                     {{ post.content }}
                 </p>
                 <div class="post-user">
-                    <p><img src="{{ post.author.userprofile.profile_picture.url }}" alt="img"> {{ post.author.first_name }}</p>
+                    <p><img src="{{ post.author.userprofile.profile_picture.url }}" alt="img"> {{ post.author.first_name
+                        }}</p>
                 </div>
             </div>
             <div class="post-links">
