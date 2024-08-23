@@ -17,6 +17,9 @@ class Post(models.Model):
     posted_at = models.DateTimeField(timezone.now, default=timezone.now)
     community = models.ForeignKey(Community, related_name='posts', on_delete=models.CASCADE, default=None, null=True)
 
+    def __str__(self) -> str:
+        return self.title
+
 
 # Comment Model
 class Comment(models.Model):
@@ -24,3 +27,15 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     comment_author = models.ForeignKey(User, on_delete=models.CASCADE)
     comment_at = models.DateTimeField(timezone.now, default=timezone.now)
+
+    #self refrencial field parent for thread comments
+    parent_comment = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='subcomments')
+
+    def __str__(self) -> str:
+        return self.comment
+    
+    def is_parent(self):
+        """
+        returns True if the comment is a parent comment
+        """
+        return self.parent_comment is None

@@ -48,6 +48,7 @@
             
             <div class="comments">
                 {% for comment in comments %}
+                    {% if comment.is_parent %}
                     <div class="comment">
                         <div class="comment-author">
                             <img src="{{ comment.comment_author.userprofile.profile_picture.url }}" alt="Commenter profile picture">
@@ -61,7 +62,22 @@
                         <span>{{ comment.comment_at|naturaltime }}</span>
                         <div class="comment-content">
                             {{ comment.comment }}
-                        </div>                        
+                        {% endif %}
+                            <hr>
+                            <!-- Render sub-comments recursively -->
+                            {% for sub_comment in comment.subcomments.all %}
+                                <div class="sub-comment">
+                                    <div class="sub-comment-author">
+                                        <!-- <img src="{{ sub_comment.comment_author.userprofile.profile_picture.url }}" alt="Sub-commenter profile picture" style="size: 5px;"> -->
+                                        <span>{{ sub_comment.comment_author }}</span>
+                                    </div>
+                                    <!-- <span>{{ sub_comment.comment_at|naturaltime }}</span> -->
+                                    <div class="sub-comment-content">
+                                        {{ sub_comment.comment }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>     
                     </div>
                 {% endfor %}
             </div>
