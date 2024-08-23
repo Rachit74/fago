@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 # Community Model
 class Community(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     members = models.ManyToManyField(User, related_name='communities')

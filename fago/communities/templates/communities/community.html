@@ -10,16 +10,16 @@
         <div class="c-actions">
                 {% if user in community.members.all %}
                 <div class="btn">
-                    <a href="{% url 'leave-community' community.id %}">Leave</a>
+                    <a href="{% url 'leave-community' community.name %}">Leave</a>
                 </div>
                 {% else %}
                 <div class="btn">
-                    <a href="{% url 'join-community' community.id %}">Join</a>
+                    <a href="{% url 'join-community' community.name %}">Join</a>
                 </div>
                 {% endif %}
                 {% if user == community.owner %}
                 <div class="btn">
-                    <a href="{% url 'delete-community' community.id %}">Delete Community</a>
+                    <a href="{% url 'delete-community' community.name %}">Delete Community</a>
                 </div>
                 <p style="color: red;">You are the owner</p>
                 {% endif %}
@@ -68,7 +68,7 @@
                                 </div>
                                 {% if post.author == user %}
                                 <div class="btn">
-                                    <a href="">Delete</a>
+                                    <a href="{% url 'delete-post' post.id %}">Delete</a>
                                 </div>
                                 {% endif %}
                             </div>

@@ -15,8 +15,8 @@ def explore(request):
     return render(request, 'communities/explore.html', context=context)
 
 # view community method (one particular community)
-def community(request, community_id):
-    community = get_object_or_404(Community, id=community_id)
+def community(request, community):
+    community = get_object_or_404(Community, name=community)
     posts = community.posts.all()
     members = community.members.all()
 
@@ -52,29 +52,29 @@ def create_community(request):
     return render(request, 'communities/create_com.html', context=context)
 
 @login_required
-def join_community(request, community_id):
+def join_community(request, community):
     user = request.user
-    community = get_object_or_404(Community, id=community_id)
+    community = get_object_or_404(Community, name=community)
     community.members.add(user)
     community.save()
 
     messages.success(request, f"You have joined {community.name}!")
-    return redirect('community', community_id=community.id)
+    return redirect('community', community=community.name)
 
 @login_required
-def leave_community(request, community_id):
+def leave_community(request, community):
     user = request.user
-    community = get_object_or_404(Community, id=community_id)
+    community = get_object_or_404(Community, name=community)
     community.members.remove(user)
     community.save()
 
     messages.warning(request, f"You left {community.name}!")
-    return redirect('community', community_id=community.id)
+    return redirect('community', community=community.name)
 
 @login_required
-def delete_community(request, community_id):
+def delete_community(request, community):
     user = request.user
-    community = get_object_or_404(Community, id=community_id)
+    community = get_object_or_404(Community, name=community)
     community_name = community.name
 
     if not user == community.owner:
