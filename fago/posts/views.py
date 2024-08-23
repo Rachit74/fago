@@ -8,7 +8,7 @@ from .models import Post, Comment
 def home(request):
     posts = Post.objects.order_by('-posted_at')
     context = {
-        'posts': posts
+        'posts': posts,
     }
     return render(request, "posts/index.html", context=context)
 
@@ -59,3 +59,31 @@ def read_post(request, post_id):
     }
 
     return render(request, 'posts/read_post.html', context=context)
+
+# delete post
+@login_required
+def delete_post(request, post_id):
+    user = request.user
+    post = get_object_or_404(Post, id=post_id)
+
+    if user == post.author:
+        post.delete()
+        messages.success(request, 'Post Deleted!')
+        return redirect('home')
+    else:
+        messages.error(request, 'Can not delete post!')
+        return redirect('read-post', post_id=post.id)
+
+# delete comment
+@login_required
+def delete_comment(request, comment_id):
+    user = request.user
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    if user == comment.comment_author:
+        comment.delete()
+        messages.success(request, 'Comment deleted')
+        return redirect('read-post', post_id=comment.post.id)
+    else:
+        messages.error(request, 'Can not delete comment!')
+        return redirect('read-post', post_id=comment.post.id)

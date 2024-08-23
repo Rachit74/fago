@@ -29,7 +29,7 @@
             <div class="post-links">
                 {% if post.author == user %}
                 <div class="btn">
-                    <a href="">Delete</a>
+                    <a href="{% url 'delete-post' post.id %}">Delete</a>
                 </div>
                 {% endif %}
             </div>
@@ -52,6 +52,10 @@
                         <div class="comment-author">
                             <img src="{{ comment.comment_author.userprofile.profile_picture.url }}" alt="Commenter profile picture">
                             <span>{{ comment.comment_author }}</span>
+                            <hr>
+                            {% if comment.comment_author == user %}
+                            <span><a href="{% url 'delete-comment' comment.id %}" style="text-decoration: none; color: rgb(168, 0, 0);">Delete</a></span>
+                            {% endif %}
                         </div>
                         {% load humanize %}
                         <span>{{ comment.comment_at|naturaltime }}</span>

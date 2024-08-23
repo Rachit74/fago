@@ -34,7 +34,7 @@
                     </div>
                     {% if post.author == user %}
                     <div class="btn">
-                        <a href="">Delete</a>
+                        <a href="{% url 'delete-post' post.id %}">Delete</a>
                     </div>
                     {% endif %}
                 </div>
