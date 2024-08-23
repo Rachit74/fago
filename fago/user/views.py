@@ -4,9 +4,11 @@ from .models import UserProfile
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required
 def user_profile(request):
 
     user = request.user
@@ -65,6 +67,7 @@ def logout_user(request):
     return redirect('login')
 
 # Edit User Profile
+@login_required
 def edit_user_profile(request):
     user = request.user
     """
