@@ -617,3 +617,8 @@ textarea {
 .community-header .btn a:hover {
     background-color: #2077b3;
 }
+
+.reply-link {
+    text-decoration: none;
+    color: #7d94a5;
+}

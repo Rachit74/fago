@@ -41,7 +41,7 @@ def create_community(request):
             community.save()
 
             messages.success(request, "Your community has been created!")
-            return redirect('community', community_id=community.id)
+            return redirect('community', community=community.name)
     else:
         form = CreateCommunityForm()
 

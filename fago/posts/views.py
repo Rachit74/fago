@@ -87,3 +87,23 @@ def delete_comment(request, comment_id):
     else:
         messages.error(request, 'Can not delete comment!')
         return redirect('read-post', post_id=comment.post.id)
+    
+@login_required
+def comment_reply(request, comment_id):
+    user = request.user
+    parent_comment = get_object_or_404(Comment, id=comment_id)
+    post = parent_comment.post
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.comment_author = user
+            reply.post=post
+            reply.parent_comment = parent_comment
+            reply.save()
+            messages.success(request, 'Comment Added!')
+            return redirect('read-post', post_id=post.id)
+    else:
+        form = CommentForm()
+    
