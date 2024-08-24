@@ -26,6 +26,7 @@ class UserLoginForm(forms.Form):
     username = forms.CharField(label='Username')
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
 
+# Edit Profile Form
 class EditProfileForm(forms.ModelForm):
     
     first_name = forms.CharField(max_length=50)

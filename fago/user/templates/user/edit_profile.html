@@ -4,14 +4,26 @@
 
 {% block content %}
 
-<div class="layout">
-  <div class="edit-profile-card">
-    <h1>Edit Profile</h1>
-    <form class="edit-profile-form" method="POST" enctype="multipart/form-data" accept="edit-profile">
+<main class="container">
+  <form class="edit-profile-form" method="POST" action="{% url 'edit-profile' %}">
+      <h1>Edit Profile</h1>
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="save-btn">Save Changes</button>
-    </form>
-  </div>
-</div>
+
+      <div class="form-group">
+        <label for="profile-pic">Profile Picture</label>
+        {{ form.profile_picture }}
+      </div>
+
+      <div class="form-group">
+        <label for="first-name">Display Name</label>
+        {{ form.first_name }}
+      </div>
+
+      <div class="form-group">
+        <label for="first-name">Bio</label>
+        {{ form.profile_bio }}
+      </div>
+      <button type="submit" class="btn">Save Changes</button>
+  </form>
+</main>
 {% endblock %}

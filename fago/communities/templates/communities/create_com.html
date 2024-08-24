@@ -3,12 +3,12 @@
 {% block title %} Communitites {% endblock %}
 
 {% block content %}
-
-    <form action="{% url 'create-community' %}" method="POST">
+<main class="container">
+    <form class="community-form" method="POST" action="{% url 'create-community' %}">
+        <h1>Create a New Community</h1>
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create</button>
+        {{ form }}
+        <button type="submit" class="btn">Create Community</button>
     </form>
-
-
+</main>
 {% endblock %}

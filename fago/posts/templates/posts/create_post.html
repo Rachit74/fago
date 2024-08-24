@@ -2,11 +2,21 @@
 {% block title %}FaGo | Create Post{% endblock %}
 
 {% block content %}
-<main class="create-post-container">
-   <form action="" enctype="multipart/form-data" method="POST" class="create-post-form">
-       {% csrf_token %}
-       {{ form.as_p }}
-       <button type="submit" class="btn">Post</button>
-   </form>
+<main class="container">
+    <form class="post-form" method="POST" action="{% url 'create-post' %}">
+        <h1>Add a New Post</h1>
+        {% csrf_token %}
+        {{ form }}
+        <!-- <input type="text" placeholder="Post Title" required> -->
+        <!-- <textarea placeholder="Post Content" required></textarea>
+        <input type="file" accept="image/*">
+        <select required>
+            <option value="" disabled selected>Select Community</option>
+            <option value="technology">Technology</option>
+            <option value="science">Science</option>
+            <option value="arts">Arts & Culture</option>
+        </select> -->
+        <button type="submit" class="btn">Add Post</button>
+    </form>
 </main>
 {% endblock %}

@@ -4,26 +4,21 @@
 
 {% block content %}
 
-<div class="communities-explore">
-    <div class="communities-header">
-        <h2>Explore Communities</h2>
-        <div class="c-actions">
-            <div class="btn">
-                <a href="{% url 'create-community' %}">Create Community</a>
-            </div>
+<main class="container">
+    <h1>Explore Communities</h1><a href="{% url 'create-community' %}" class="hi">Create Community</a>
+    <div class="communities">
+        {% for community in communities %}
+        <div class="community-card">
+            <h2>{{ community.name }}</h2>
+            <p>{{ community.description }}</p>
+                {% if community in user.communities.all %}
+                <a href="{% url 'community' community.name %}" class="btn">View</a>
+                {% else %}
+                <a href="{% url 'join-community' community.name %}" class="btn">Join Community</a>
+                {% endif %}
         </div>
+        {% endfor %}
     </div>
-    {% for c in communities %}
-    <div class="community">
-        <div class="community-header">
-            <h3>{{ c.name }}</h3>
-            <p>{{ c.description }}</p>
-            <div class="btn">
-                <a href="{% url 'community' c.name %}">View</a>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
+</main>
 
 {% endblock %}
