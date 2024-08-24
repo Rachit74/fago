@@ -7,7 +7,7 @@
 <main class="container">
   <div class="profile">
       <div class="profile-header">
-          <img src="user.userprofile.profile_picture.url" alt="Profile Picture" class="profile-pic">
+          <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
           <div class="profile-info">
               <h1>{{ user.first_name }}</h1>
               <p class="username">@{{ user.username }}</p>
@@ -19,25 +19,34 @@
       <div class="profile-content">
           <h2>User's Posts</h2>
           <div class="posts">
-              <div class="post">
-                  <h3>Sample Post Title 1</h3>
-                  <p>This is a sample post content by the user.</p>
-              </div>
-              <div class="post">
-                  <h3>Sample Post Title 2</h3>
-                  <p>This is another sample post content by the user.</p>
-              </div>
-          </div>
+            {% if user_posts %}
+                {% for post in user_posts %}
+                <div class="post">
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.content|slice:150 }}... <a href="{% url 'read-post' post.id %}" class="hi">Read More</a></p>
+                    <a href="{% url 'delete-post' post.id %}" class="hi">Delete</a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <span class="hi_span">You have not posted anything yet</span>
+                <h4><a href="{% url 'create-post' %}" class="hi">Post Something</a></h4>
+            {% endif %}
           <h2>Communities</h2>
           <div class="communities">
-              <div class="community-card">
-                  <h3>Technology</h3>
-                  <p>A community for tech enthusiasts.</p>
-              </div>
-              <div class="community-card">
-                  <h3>Science</h3>
-                  <p>Discuss the latest scientific discoveries.</p>
-              </div>
+            {% if user_communities %}
+                {% for community in user_communities %}
+                <div class="community-card">
+                    <h3>{{ community.name }}</h3>
+                    <p>{{ community.description }}</p>
+                    <a href="{% url 'leave-community' community.name %}" class="hi">Leave Community</a><br>
+                    {% if user == community.owner %}
+                    <a href="{% url 'delete-community' community.name %}" class="hi">Delete</a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <h4><a href="{% url 'explore-communities'  %}" class="hi">Find Communities</a></h4>
+            {% endif %}
           </div>
       </div>
   </div>

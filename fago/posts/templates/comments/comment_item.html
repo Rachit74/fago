@@ -1,0 +1,30 @@
+{% load humanize %}
+<div class="comment">
+    <div class="comment-header">
+        <img src="{{ comment.comment_author.userprofile.profile_picture.url }}" alt="User Avatar" class="comment-avatar">
+        <span class="comment-author">{{ comment.comment_author }}</span>
+        <span class="comment-date">{{ comment.comment_at|naturaltime }}</span>
+    </div>
+    <p>{{ comment.comment }}</p>
+    <div class="comment-actions">
+        <a href="#" class="show-link" onclick="toggleBox(event, 'reply-box-{{ comment.id }}')">Reply</a>
+        <!-- <button class="btn-link">Upvote</button> -->
+    </div>
+
+    <!-- Replies -->
+    {% if comment.subcomments.all %}
+        <div class="comment-replies">
+            {% for subcomment in comment.subcomments.all %}
+                {% include 'comments/comment_item.html' with comment=subcomment %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div id="reply-box-{{ comment.id }}" class="reply-box">
+        <form action="{% url 'comment-reply' comment.id %}" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button>Post Reply</button>
+        </form>
+    </div>
+</div>

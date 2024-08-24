@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from posts.models import Post
 
 # Create your views here.
 
@@ -12,9 +13,14 @@ from django.contrib.auth.decorators import login_required
 def user_profile(request):
 
     user = request.user
+
+    user_posts = Post.objects.filter(author=user)
+    user_communities = user.communities.all()
     
     context = {
-        'user':user
+        'user':user,
+        'user_posts': user_posts,
+        'user_communities': user_communities,
     }
 
     return render(request, 'user/profile.html', context=context)

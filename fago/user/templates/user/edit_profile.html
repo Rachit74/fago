@@ -5,25 +5,27 @@
 {% block content %}
 
 <main class="container">
-  <form class="edit-profile-form" method="POST" action="{% url 'edit-profile' %}">
-      <h1>Edit Profile</h1>
-      {% csrf_token %}
-
-      <div class="form-group">
+  <form class="edit-profile-form" method="POST" action="{% url 'edit-profile' %}" enctype="multipart/form-data">
+    <h1>Edit Profile</h1>
+    {% csrf_token %}
+    
+    <div class="form-group">
         <label for="profile-pic">Profile Picture</label>
         {{ form.profile_picture }}
-      </div>
+    </div>
 
-      <div class="form-group">
+    <div class="form-group">
         <label for="first-name">Display Name</label>
         {{ form.first_name }}
-      </div>
+    </div>
 
-      <div class="form-group">
-        <label for="first-name">Bio</label>
+    <div class="form-group">
+        <label for="profile-bio">Bio</label>
         {{ form.profile_bio }}
-      </div>
-      <button type="submit" class="btn">Save Changes</button>
-  </form>
+    </div>
+    
+    <button type="submit" class="btn">Save Changes</button>
+</form>
+
 </main>
 {% endblock %}

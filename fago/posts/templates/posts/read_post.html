@@ -13,49 +13,39 @@
             <span>Community: {{ post.community }}</span>
         </div>
         {% if post.image %}
-        <img src="https://via.placeholder.com/800x400" alt="Post image" class="post-image">
+        <img src="{{ post.image.url }}" alt="Post image" class="post-image" style="margin-top: 10px;">
         {% endif %}
         <div class="post-content">
             <p>{{ post.content }}</p>
         </div>
-        <!-- <div class="post-actions">
-            <button class="btn">Upvote</button>
-            <button class="btn">Comment</button>
-            <button class="btn">Share</button>
-        </div> -->
     </article>
+
     <section class="comments">
         <h2>Comments</h2>
         <div class="comment-thread">
             {% for comment in comments %}
-            <div class="comment">
-                <div class="comment-header">
-                    <!-- <img src="https://via.placeholder.com/40" alt="User Avatar" class="comment-avatar"> -->
-                    <span class="comment-author">{{ comment.comment_author }}</span>
-                    <span class="comment-date">{{ comment.comment_at|naturaltime }}</span>
-                </div>
-                <p>{{ comment.comment }}</p>
-                <div class="comment-actions">
-                    <button class="btn-link">Reply</button>
-                    <button class="btn-link">Upvote</button>
-                </div>
-                <!-- <div class="comment-replies">
-                    <div class="comment">
-                        <div class="comment-header">
-                            <img src="https://via.placeholder.com/40" alt="User Avatar" class="comment-avatar">
-                            <span class="comment-author">Commenter2</span>
-                            <span class="comment-date">August 26, 2024</span>
-                        </div>
-                        <p>This is a reply to the top-level comment.</p>
-                        <div class="comment-actions">
-                            <button class="btn-link">Reply</button>
-                            <button class="btn-link">Upvote</button>
-                        </div>
-                    </div>
-                </div> -->
-            </div>
+                {% if comment.is_parent %}
+                    {% include 'comments/comment_item.html' with comment=comment %}
+                {% endif %}
             {% endfor %}
         </div>
+
+        <div class="comment-box" id="comment-box">
+            <form action="{% url 'read-post' post.id %}" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button>Post Comment</button>
+            </form>
+        </div>
+        <a href="#" class="show-link" onclick="toggleBox(event, 'comment-box')">Add a Comment</a>
     </section>
 </main>
+
+<script>
+    function toggleBox(event, boxId) {
+        event.preventDefault();
+        const box = document.getElementById(boxId);
+        box.classList.toggle('active');
+    }
+</script>
 {% endblock %}
