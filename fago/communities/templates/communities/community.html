@@ -17,7 +17,7 @@
             <div class="post-meta">
                 <span>Posted by: {{ post.author }}</span>
                 <!-- <span>Upvotes: 15</span> -->
-                <!-- <span>Comments: 3</span> -->
+                <span>Comments: {{ post.comment_set.count }}</span>
             </div>
             <a href="{% url 'read-post' post.id %}" class="hi">Comments</a>
         </div>
