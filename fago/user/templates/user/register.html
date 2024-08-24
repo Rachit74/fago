@@ -1,0 +1,32 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} Register {% endblock %}
+
+{% block content %}
+<main>
+    <div class="register-form-container">
+        <h2>Register</h2>
+        <form class="register-form" action="{% url 'register' %}" method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="field-errors">
+                            {% for error in field.errors %}
+                                <span class="error-message">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="register-btn">Register</button>
+        </form>
+        <div class="form-footer">
+            <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

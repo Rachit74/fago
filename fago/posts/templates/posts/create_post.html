@@ -1,0 +1,12 @@
+{% extends "posts/base.html" %}
+{% block title %}FaGo | Create Post{% endblock %}
+
+{% block content %}
+<main class="create-post-container">
+   <form action="" enctype="multipart/form-data" method="POST" class="create-post-form">
+       {% csrf_token %}
+       {{ form.as_p }}
+       <button type="submit" class="btn">Post</button>
+   </form>
+</main>
+{% endblock %}

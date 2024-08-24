@@ -1,0 +1,48 @@
+{% extends "posts/base.html" %}
+{% block title %}FaGo | Home{% endblock %}
+
+{% block content %}
+<main>
+    <div class="posts">
+        {% if posts %}
+            {% for post in posts %}
+            <div class="post">
+                <div class="post-title">
+                    <h2>{{ post.title }}</h2>
+                    <div class="post-author">
+                        <img src="{{ post.author.userprofile.profile_picture.url }}" alt="Author profile picture">
+                        <span>{{ post.author.first_name }}</span>
+                    </div>
+                    {% load humanize %}
+                    <span class="post-time">{{ post.posted_at|naturaltime }}</span><br>
+                    Community: <span>c/{{ post.community }}</span><br>
+                </div>
+                
+                {% if post.image %}
+                <div class="post-image">
+                    <img src="{{ post.image.url }}" alt="Post image">
+                </div>
+                {% endif %}
+                
+                <div class="post-content">
+                    <p>{{ post.content }}</p>
+                </div>
+                
+                <div class="post-links">
+                    <div class="btn">
+                        <a href="{% url 'read-post' post.id %}">Read</a>
+                    </div>
+                    {% if post.author == user %}
+                    <div class="btn">
+                        <a href="{% url 'delete-post' post.id %}">Delete</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <h2>No Posts Yet.</h2>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

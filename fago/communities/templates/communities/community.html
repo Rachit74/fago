@@ -1,0 +1,93 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} {{ community.name }} {% endblock %}
+
+{% block content %}
+
+<div class="communities-expore">
+    <div class="communities-header">
+        <h2>Community</h2>
+        <div class="c-actions">
+                {% if user in community.members.all %}
+                <div class="btn">
+                    <a href="{% url 'leave-community' community.name %}">Leave</a>
+                </div>
+                {% else %}
+                <div class="btn">
+                    <a href="{% url 'join-community' community.name %}">Join</a>
+                </div>
+                {% endif %}
+                {% if user == community.owner %}
+                <div class="btn">
+                    <a href="{% url 'delete-community' community.name %}">Delete Community</a>
+                </div>
+                <p style="color: red;">You are the owner</p>
+                {% endif %}
+        </div>
+    </div>
+    <div class="community">
+        <div class="community-banner">
+            {% if community.banner %}
+                <img src="{{ community.banner.url }}" alt="">
+            {% else %}
+                <p>No Banner</p>
+            {% endif %}
+        </div>
+        <div class="community-header">
+            <h3>{{ community.name }}</h3>
+            <p>{{ community.description }}</p>
+        </div>
+                <div class="posts">
+                    {% if posts %}
+                        {% for post in posts %}
+                        <div class="post">
+                            <div class="post-title">
+                                <h2>{{ post.title }}</h2>
+                                <div class="post-author">
+                                    <img src="{{ post.author.userprofile.profile_picture.url }}" alt="Author profile picture">
+                                    <span>{{ post.author.first_name }}</span>
+                                </div>
+                                {% load humanize %}
+                                <span class="post-time">{{ post.posted_at|naturaltime }}</span><br>
+                                Community: <span>c/{{ post.community }}</span><br>
+                            </div>
+                            
+                            {% if post.image %}
+                            <div class="post-image">
+                                <img src="{{ post.image.url }}" alt="Post image">
+                            </div>
+                            {% endif %}
+                            
+                            <div class="post-content">
+                                <p>{{ post.content }}</p>
+                            </div>
+                            
+                            <div class="post-links">
+                                <div class="btn">
+                                    <a href="{% url 'read-post' post.id %}">Read</a>
+                                </div>
+                                {% if post.author == user %}
+                                <div class="btn">
+                                    <a href="{% url 'delete-post' post.id %}">Delete</a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <h2>No Posts Yet.</h2>
+                    {% endif %}
+                </div>
+        </div>
+        <div class="community-members">
+            <h4>Community Members</h4>
+            <div class="members-card">
+            {% for member in members %}
+                {{ member.username }} <br>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

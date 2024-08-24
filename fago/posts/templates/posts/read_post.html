@@ -1,0 +1,132 @@
+{% extends "posts/base.html" %}
+{% block title %}FaGo | Post{% endblock %}
+
+{% block content %}
+{% load humanize %}
+
+<main>
+    <div class="posts">
+        <div class="post">
+            <div class="post-title">
+                <h2>{{ post.title }}</h2>
+                <div class="post-author">
+                    <img src="{{ post.author.userprofile.profile_picture.url }}" alt="Author profile picture">
+                    <span>{{ post.author.first_name }}</span>
+                </div>
+                <span class="post-time">{{ post.posted_at|naturaltime }}</span><br>
+                <span>Community: {{ post.community }}</span>
+            </div>
+            
+            {% if post.image %}
+            <div class="post-image">
+                <img src="{{ post.image.url }}" alt="Post image">
+            </div>
+            {% endif %}
+            
+            <div class="post-content">
+                <p>{{ post.content }}</p>
+            </div>
+            
+            <div class="post-links">
+                {% if post.author == user %}
+                <div class="btn">
+                    <a href="{% url 'delete-post' post.id %}">Delete</a>
+                </div>
+                {% endif %}
+            </div>
+            
+            {% if user.is_authenticated %}
+            <div class="comment-bar">
+                <form action="{% url 'read-post' post.id %}" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Comment</button>
+                </form>
+            </div>
+            {% else %}
+            <p class="login-to-comment">Login to comment</p>
+            {% endif %}
+            
+            <div class="comments">
+                {% for comment in comments %}
+                    {% if comment.is_parent %}
+                        <div class="comment" {% if not comment.is_parent %}style="margin-left: 20px;"{% endif %}>
+                            <div class="comment-author">
+                                <img src="{{ comment.comment_author.userprofile.profile_picture.url }}" alt="Commenter profile picture">
+                                <span>{{ comment.comment_author }}</span>
+                                <hr>
+                                {% if comment.comment_author == user %}
+                                <span><a href="{% url 'delete-comment' comment.id %}" style="text-decoration: none; color: rgb(168, 0, 0);">Delete</a></span>
+                                {% endif %}
+                            </div>
+                            <span>{{ comment.comment_at|naturaltime }}</span>
+                            <div class="comment-content">
+                                {{ comment.comment }}
+                            </div>
+                            <a href="#" class="reply-link" data-comment-id="{{ comment.id }}">Reply</a>
+                            <div class="reply-box" id="reply-box-{{ comment.id }}" style="display: none;">
+                                <form action="{% url 'comment-reply' comment.id %}" method="POST">
+                                    {% csrf_token %}
+                                    {{ form }}
+                                    <button type="submit">Submit Reply</button>
+                                </form>
+                            </div>
+                            <hr>
+                            
+                            {% for child_comment in comment.subcomments.all %}
+                                <div class="sub-comment" style="margin-left: 20px;">
+                                    <div class="sub-comment-author">
+                                        <span>{{ child_comment.comment_author }}</span>
+                                    </div>
+                                    <div class="sub-comment-content">
+                                        {{ child_comment.comment }}
+                                    </div>
+                                    <a href="#" class="reply-link" data-comment-id="{{ child_comment.id }}">Reply</a>
+                                    <div class="reply-box" id="reply-box-{{ child_comment.id }}" style="display: none;">
+                                        <form action="{% url 'comment-reply' child_comment.id %}" method="POST">
+                                            {% csrf_token %}
+                                            {{ form }}
+                                            <button type="submit">Submit Reply</button>
+                                        </form>
+                                    </div>
+                                    <hr>
+                                    
+                                    <!-- Recursive rendering for grandchild comments -->
+                                    {% for grandchild_comment in child_comment.subcomments.all %}
+                                        <div class="grandchild-comment" style="margin-left: 40px;">
+                                            <div class="grandchild-comment-author">
+                                                <span>{{ grandchild_comment.comment_author }}</span>
+                                            </div>
+                                            <div class="grandchild-comment-content">
+                                                {{ grandchild_comment.comment }}
+                                            </div>
+                                            
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const replyLinks = document.querySelectorAll('.reply-link');
+    replyLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const commentId = this.getAttribute('data-comment-id');
+            const replyBox = document.getElementById(`reply-box-${commentId}`);
+            replyBox.style.display = replyBox.style.display === 'none' ? 'block' : 'none';
+        });
+    });
+});
+</script>
+
+{% endblock %}

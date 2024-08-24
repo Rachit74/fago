@@ -1,0 +1,17 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} FaGo | {{ user.username }} {% endblock %}
+
+{% block content %}
+
+<div class="layout">
+  <div class="edit-profile-card">
+    <h1>Edit Profile</h1>
+    <form class="edit-profile-form" method="POST" enctype="multipart/form-data" accept="edit-profile">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="save-btn">Save Changes</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
