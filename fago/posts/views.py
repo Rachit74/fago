@@ -47,11 +47,17 @@ def read_post(request, post_id):
             comment.comment_author = request.user
             comment.save()
 
-            # send notification
-            post_author = comment.post.author
-            notification_from = comment.comment_author
-            notification = Notification.objects.create(user=post_author, message=f"from  {comment.comment[0:20]}", notification_from=notification_from, post=post)
+             # send notification
+            post_author = post.author
+            notification = Notification.objects.create(
+                notification_for = post_author,
+                notification_from = comment.comment_author,
+                post = comment.post,
+                comment = comment
+            )
+
             notification.save()
+
 
             messages.info(request, 'Comment Added!')
             return redirect('read-post', post_id=post.id)
@@ -110,15 +116,17 @@ def comment_reply(request, comment_id):
             reply.parent_comment = parent_comment
             reply.save()
 
-           # Send notification
+            # send notification
             comment_author = parent_comment.comment_author
-            notification_from = reply.comment_author
-            Notification.objects.create(
-                user=comment_author,
-                message=f"{reply.comment[:20]}",  # Truncate the comment for brevity
-                notification_from=notification_from,
-                comment = parent_comment
-            ).save()
+            notification = Notification.objects.create(
+                notification_for = comment_author,
+                notification_from = reply.comment_author,
+                comment = parent_comment,
+                post = post
+            )
+
+            notification.save()
+
             messages.success(request, 'Comment Added!')
             return redirect('read-post', post_id=post.id)
     else:
@@ -129,7 +137,7 @@ def comment_reply(request, comment_id):
 def delete_notification(request, notification_id):
     user = request.user
     notification = get_object_or_404(Notification, id=notification_id)
-    if notification.user == user:
+    if notification.notification_for == user:
         notification.delete()
     else:
         messages.error("Can not delete notification")
@@ -137,27 +145,21 @@ def delete_notification(request, notification_id):
     return redirect('home')
 
 @login_required
-def view_notification(request, notification_id):
+def notification(request, notification_id):
     notification = get_object_or_404(Notification, id=notification_id)
 
-    if notification.user != request.user:
+    if notification.notification_for != request.user:
         messages.error(request, "You do not have permission to view this notification.")
         return redirect('home')
 
     post = notification.post
-    comments = []
-
-    # If the notification is about a comment, get the comment and its replies
-    if notification.comment:
-        comment = notification.comment
-        comments = comment.subcomments.all()
-    else:
-        comment = None
+    comment = notification.comment
+    subcomments = notification.comment.subcomments.all()
 
     context = {
         'post': post,
         'comment': comment,
-        'comments': comments,
+        'subcomments': subcomments,
     }
 
     return render(request, 'posts/notification.html', context=context)

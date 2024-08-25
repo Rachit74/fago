@@ -46,9 +46,8 @@ A record in the notification model will be inserted whenever someones comments o
 The login will be handled in the respective views
 """
 class Notification(models.Model):
-    is_read = models.BooleanField(default=False)
     time = models.DateTimeField(timezone.now, default=timezone.now)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    notification_for = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
     notification_from = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True, null=True)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, blank=True, null=True)

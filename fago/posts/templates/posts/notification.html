@@ -1,0 +1,47 @@
+{% extends "posts/base.html" %}
+{% block title %}FaGo | Post{% endblock %}
+
+{% block content %}
+{% load humanize %}
+
+<main class="container">
+    <article class="full-post">
+        <h1>{{ post.title }}</h1>
+        <div class="post-meta">
+            <span>Posted by: {{ post.author }}</span>
+            <span>{{ post.posted_at|naturaltime }}</span>
+            <span>Community: {{ post.community }}</span>
+        </div>
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="Post image" class="post-image" style="margin-top: 10px;">
+        {% endif %}
+        <div class="post-content">
+            <p>{{ post.content }}</p>
+        </div>
+    </article>
+
+    <section class="comments">
+        <h2>Comments</h2>
+        <div class="comment-thread">
+                    {% include 'comments/comment_item.html' with comment=comment %}
+        </div>
+
+        <div class="comment-box" id="comment-box">
+            <form action="{% url 'read-post' post.id %}" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button>Post Comment</button>
+            </form>
+        </div>
+        <a href="#" class="show-link" onclick="toggleBox(event, 'comment-box')">Add a Comment</a>
+    </section>
+</main>
+
+<script>
+    function toggleBox(event, boxId) {
+        event.preventDefault();
+        const box = document.getElementById(boxId);
+        box.classList.toggle('active');
+    }
+</script>
+{% endblock %}

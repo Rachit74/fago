@@ -24,7 +24,7 @@
                             {% for notification in user.notifications.all reversed %}
                             <li>
                                 {% load humanize %}
-                                <strong><a href="" class="hi">{{ notification.notification_from }}</a></strong> replied to your post <br><a href="{% url 'read-post' 1 %}" class="hi">View</a> <a href="{% url 'delete-notification' notification.id %}?next={{ request.get_full_path }}" class="hi">Delete</a>
+                                <strong><a href="" class="hi">{{ notification.notification_from }}</a></strong> replied to your post <br><a href="{% url 'notification' notification.id %}" class="hi">View</a> <a href="{% url 'delete-notification' notification.id %}?next={{ request.get_full_path }}" class="hi">Delete</a>
                                 <span class="notification-time">{{ notification.time|naturaltime }}</span>
                             </li>
                             {% endfor %}

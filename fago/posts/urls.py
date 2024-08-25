@@ -10,5 +10,5 @@ urlpatterns = [
     path('create_post/', views.create_post, name='create-post'),
 
     path('delete_notification/<int:notification_id>', views.delete_notification, name='delete-notification'),
-    path('view_notfication/<int:notification_id>', views.view_notification, name='view-notification'),
+    path('notification/<int:notification_id>', views.notification, name='notification'),
 ]
