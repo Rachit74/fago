@@ -8,4 +8,7 @@ urlpatterns = [
     path('delete_comment/<int:comment_id>',views.delete_comment, name='delete-comment'),
     path('comment_reply/<int:comment_id>', views.comment_reply, name='comment-reply'),
     path('create_post/', views.create_post, name='create-post'),
+
+    path('delete_notification/<int:notification_id>', views.delete_notification, name='delete-notification'),
+    path('view_notfication/<int:notification_id>', views.view_notification, name='view-notification'),
 ]

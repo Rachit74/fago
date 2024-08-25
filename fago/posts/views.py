@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CreatePostForm, CommentForm
-from .models import Post, Comment
+from .models import Post, Comment, Notification
 
 # Create your views here.
 def home(request):
@@ -46,6 +46,13 @@ def read_post(request, post_id):
             comment.post = post
             comment.comment_author = request.user
             comment.save()
+
+            # send notification
+            post_author = comment.post.author
+            notification_from = comment.comment_author
+            notification = Notification.objects.create(user=post_author, message=f"from  {comment.comment[0:20]}", notification_from=notification_from, post=post)
+            notification.save()
+
             messages.info(request, 'Comment Added!')
             return redirect('read-post', post_id=post.id)
     else:
@@ -102,8 +109,55 @@ def comment_reply(request, comment_id):
             reply.post=post
             reply.parent_comment = parent_comment
             reply.save()
+
+           # Send notification
+            comment_author = parent_comment.comment_author
+            notification_from = reply.comment_author
+            Notification.objects.create(
+                user=comment_author,
+                message=f"{reply.comment[:20]}",  # Truncate the comment for brevity
+                notification_from=notification_from,
+                comment = parent_comment
+            ).save()
             messages.success(request, 'Comment Added!')
             return redirect('read-post', post_id=post.id)
     else:
         form = CommentForm()
     
+# Delete Notification view
+@login_required
+def delete_notification(request, notification_id):
+    user = request.user
+    notification = get_object_or_404(Notification, id=notification_id)
+    if notification.user == user:
+        notification.delete()
+    else:
+        messages.error("Can not delete notification")
+    
+    return redirect('home')
+
+@login_required
+def view_notification(request, notification_id):
+    notification = get_object_or_404(Notification, id=notification_id)
+
+    if notification.user != request.user:
+        messages.error(request, "You do not have permission to view this notification.")
+        return redirect('home')
+
+    post = notification.post
+    comments = []
+
+    # If the notification is about a comment, get the comment and its replies
+    if notification.comment:
+        comment = notification.comment
+        comments = comment.subcomments.all()
+    else:
+        comment = None
+
+    context = {
+        'post': post,
+        'comment': comment,
+        'comments': comments,
+    }
+
+    return render(request, 'posts/notification.html', context=context)

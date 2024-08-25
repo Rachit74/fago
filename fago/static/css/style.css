@@ -627,3 +627,107 @@ footer {
 .show-link:hover {
     color: #a42621;
 }
+
+/* Notifications - Light Theme */
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.notifications {
+    position: relative;
+    margin-right: 20px;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #555;
+    cursor: pointer;
+}
+
+.btn-icon:hover {
+    color: #ff4b4b;
+}
+
+.notification-box {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.notification-box h3 {
+    padding: 10px;
+    border-bottom: 1px solid #e2e2e2;
+    color: #333;
+    background-color: #f5f5f5;
+    margin: 0;
+}
+
+.notification-box ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notification-box li {
+    padding: 10px;
+    border-bottom: 1px solid #e2e2e2;
+    color: #333;
+}
+
+.notification-box li:last-child {
+    border-bottom: none;
+}
+
+.notification-box li:hover {
+    background-color: #f9f9f9;
+}
+
+.notification-time {
+    display: block;
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+}
+
+/* Responsive design for notifications */
+@media (max-width: 768px) {
+    .nav-right {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .notifications {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .notification-box {
+        width: 100%;
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
+.special {
+    color: #a42621;
+    font-weight: lighter;
+}
+
+img {
+    max-width: 100%;  /* Ensures the image will not exceed the width of its container */
+    max-height: 400px; /* Set your desired maximum height */
+    height: auto;  /* Maintains aspect ratio */
+}

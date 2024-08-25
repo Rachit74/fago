@@ -2,7 +2,11 @@
 <div class="comment">
     <div class="comment-header">
         <img src="{{ comment.comment_author.userprofile.profile_picture.url }}" alt="User Avatar" class="comment-avatar">
+        {% if comment.comment_author == comment.post.author %}
+        <span class="comment-author">{{ comment.comment_author }} <span class="special">Author</span></span>
+        {% else %}
         <span class="comment-author">{{ comment.comment_author }}</span>
+        {% endif %}
         <span class="comment-date">{{ comment.comment_at|naturaltime }}</span>
     </div>
     <p>{{ comment.comment }}</p>

@@ -8,6 +8,7 @@
         {% for post in posts %}
         <div class="post">
             <h2>{{ post.title }}</h2>
+            <a href="{% url 'community' post.community %}" class="hi">/c/{{ post.community }}</a>
             <p>{{ post.content }}</p>
             <div class="post-meta">
                 <span>Posted by: {{ post.author }}</span>

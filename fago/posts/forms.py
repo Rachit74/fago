@@ -29,7 +29,7 @@ class CommentForm(forms.ModelForm):
                 'rows': 5,
         }
         )
-    )
+    )        
 
     class Meta:
         model = Comment

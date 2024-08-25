@@ -6,6 +6,7 @@
     {% load static %}
     <title>{% block title %} {% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
@@ -14,6 +15,22 @@
             <a href="{% url 'explore-communities'  %}">Explore</a>
             <input type="text" placeholder="Search...">
             {% if user.is_authenticated %}
+            <div class="nav-right">
+                <div class="notifications">
+                    <button id="notificationBtn" class="btn-icon"><i class="fas fa-bell"></i></button>
+                    <div id="notificationBox" class="notification-box">
+                        <h3>Notifications</h3>
+                        <ul>
+                            {% for notification in user.notifications.all reversed %}
+                            <li>
+                                {% load humanize %}
+                                <strong><a href="" class="hi">{{ notification.notification_from }}</a></strong> replied to your post <br><a href="{% url 'read-post' 1 %}" class="hi">View</a> <a href="{% url 'delete-notification' notification.id %}?next={{ request.get_full_path }}" class="hi">Delete</a>
+                                <span class="notification-time">{{ notification.time|naturaltime }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+            </div>
             <a href="{% url 'create-post' %}">Post</a>
             <a href="{% url 'user_profile' %}">Profile</a>
             {% else %}
@@ -27,5 +44,21 @@
     <footer>
         <p>Django-Fago</p>
     </footer>
+
+    <script>
+        const notificationBtn = document.getElementById('notificationBtn');
+        const notificationBox = document.getElementById('notificationBox');
+
+        notificationBtn.addEventListener('click', () => {
+            notificationBox.style.display = notificationBox.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close the notification box if clicked outside
+        window.addEventListener('click', (e) => {
+            if (!notificationBtn.contains(e.target) && !notificationBox.contains(e.target)) {
+                notificationBox.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

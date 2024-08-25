@@ -39,3 +39,16 @@ class Comment(models.Model):
         returns True if the comment is a parent comment
         """
         return self.parent_comment is None
+    
+# Notification Model
+"""
+A record in the notification model will be inserted whenever someones comments or replies to someone
+The login will be handled in the respective views
+"""
+class Notification(models.Model):
+    is_read = models.BooleanField(default=False)
+    time = models.DateTimeField(timezone.now, default=timezone.now)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    notification_from = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True, null=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, blank=True, null=True)
