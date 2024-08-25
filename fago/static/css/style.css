@@ -731,3 +731,78 @@ img {
     max-height: 400px; /* Set your desired maximum height */
     height: auto;  /* Maintains aspect ratio */
 }
+
+/* Flashed Messages */
+.messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.messages li {
+    background-color: #a42621;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    padding: 15px;
+    margin-bottom: 15px;
+    color: #ffffff;
+    position: relative;
+}
+
+/* .messages li.success {
+    border-color: #d4edda;
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.messages li.error {
+    border-color: #f8d7da;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.messages li.info {
+    border-color: #cce5ff;
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.messages li.warning {
+    border-color: #fff3cd;
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.messages li:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    border: 10px solid transparent;
+}
+
+.messages li.success:before {
+    border-left-color: #d4edda;
+}
+
+.messages li.error:before {
+    border-left-color: #f8d7da;
+}
+
+.messages li.info:before {
+    border-left-color: #cce5ff;
+}
+
+.messages li.warning:before {
+    border-left-color: #fff3cd;
+}
+
+.messages li a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.messages li a:hover {
+    color: #0056b3;
+} */

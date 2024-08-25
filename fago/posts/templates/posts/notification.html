@@ -25,15 +25,6 @@
         <div class="comment-thread">
                     {% include 'comments/comment_item.html' with comment=comment %}
         </div>
-
-        <div class="comment-box" id="comment-box">
-            <form action="{% url 'read-post' post.id %}" method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button>Post Comment</button>
-            </form>
-        </div>
-        <a href="#" class="show-link" onclick="toggleBox(event, 'comment-box')">Add a Comment</a>
     </section>
 </main>
 

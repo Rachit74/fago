@@ -22,22 +22,29 @@
 
     <section class="comments">
         <h2>Comments</h2>
-        <div class="comment-thread">
+
+        <!-- comment form toggle -->
+            {% if user.is_authenticated %}
+            <a href="#" class="show-link" onclick="toggleBox(event, 'comment-box')">Add a Comment</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="hi">Login</a> to comment
+            {% endif %}
+
+            <div class="comment-thread">
+                <div class="comment-box" id="comment-box">
+                    <form action="{% url 'read-post' post.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button>Post Comment</button>
+                    </form>
+                </div>
+            <!--  -->
             {% for comment in comments %}
                 {% if comment.is_parent %}
                     {% include 'comments/comment_item.html' with comment=comment %}
                 {% endif %}
             {% endfor %}
         </div>
-
-        <div class="comment-box" id="comment-box">
-            <form action="{% url 'read-post' post.id %}" method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button>Post Comment</button>
-            </form>
-        </div>
-        <a href="#" class="show-link" onclick="toggleBox(event, 'comment-box')">Add a Comment</a>
     </section>
 </main>
 

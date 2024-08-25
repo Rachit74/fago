@@ -11,19 +11,13 @@
     </div>
     <p>{{ comment.comment }}</p>
     <div class="comment-actions">
+        {% if user.is_authenticated %}
         <a href="#" class="show-link" onclick="toggleBox(event, 'reply-box-{{ comment.id }}')">Reply</a>
+        {% endif %}
         <!-- <button class="btn-link">Upvote</button> -->
     </div>
 
     <!-- Replies -->
-    {% if comment.subcomments.all %}
-        <div class="comment-replies">
-            {% for subcomment in comment.subcomments.all %}
-                {% include 'comments/comment_item.html' with comment=subcomment %}
-            {% endfor %}
-        </div>
-    {% endif %}
-
     <div id="reply-box-{{ comment.id }}" class="reply-box">
         <form action="{% url 'comment-reply' comment.id %}" method="POST">
             {% csrf_token %}
@@ -31,4 +25,11 @@
             <button>Post Reply</button>
         </form>
     </div>
+    {% if comment.subcomments.all %}
+        <div class="comment-replies">
+            {% for subcomment in comment.subcomments.all %}
+                {% include 'comments/comment_item.html' with comment=subcomment %}
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>

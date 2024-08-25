@@ -38,6 +38,21 @@
             {% endif %}
         </nav>
     </header>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">
+                {{ message }}
+                {% if message.tags == "error" %}
+                    <a href="{% url 'help_page' %}" class="btn-link">Help</a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
     {% block content %}
 
     {% endblock %}
