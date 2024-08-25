@@ -13,7 +13,10 @@
         <nav>
             <a href="{% url 'home' %}" class="logo">Fago</a>
             <a href="{% url 'explore-communities'  %}">Explore</a>
-            <input type="text" placeholder="Search...">
+            <form method="GET" action="{% url 'search' %}">
+                <input type="text" name="query" placeholder="Search..." value="{{ request.GET.query }}" required>
+                <button type="submit">Search</button>
+            </form>
             {% if user.is_authenticated %}
             <div class="nav-right">
                 <div class="notifications">

@@ -3,6 +3,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CreatePostForm, CommentForm
 from .models import Post, Comment, Notification
+from communities.models import Community
+from django.contrib.auth.models import User
+from django.db.models import Q
 
 # Create your views here.
 def home(request):
@@ -163,3 +166,21 @@ def notification(request, notification_id):
     }
 
     return render(request, 'posts/notification.html', context=context)
+
+# Search query view
+def search(request):
+
+    query = request.GET.get('query', '')
+
+
+    users = User.objects.filter(Q(username__contains=query))
+    posts = Post.objects.filter(Q(title__contains=query) | Q(content__contains=query))
+    communities = Community.objects.filter(Q(name__contains=query))
+
+    context = {
+        'users': users,
+        'posts': posts,
+        'communities': communities,
+    }
+
+    return render(request, 'posts/search.html', context=context)

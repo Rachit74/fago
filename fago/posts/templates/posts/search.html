@@ -1,0 +1,70 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} {% endblock %}
+
+{% block content %}
+
+<main class="container">
+    <h1>Search Results for "sample search"</h1>
+    <div class="search-tabs">
+        <button class="tab-btn active" data-tab="users">Users</button>
+        <button class="tab-btn" data-tab="posts">Posts</button>
+        <button class="tab-btn" data-tab="communities">Communities</button>
+    </div>
+    <div class="search-results">
+        <div class="tab-content active" id="users">
+            {% for user in users %}
+            <div class="user-result">
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="User Avatar" class="user-avatar">
+                <div class="user-info">
+                    <h3>{{ user.first_name }}</h3>
+                    <p>@{{ user.username }}</p>
+                    <p>{{ user.userprofile.profile_bio }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="tab-content" id="posts">
+            {% for post in posts %}
+            <div class="post-result">
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.content|slice:50 }}... <a href="" class="hi">Read Post</a></p>
+                <div class="post-meta">
+                    <span>Posted by: {{ post.author }}</span>
+                    <span>Date: {{ post.posted_at }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="tab-content" id="communities">
+            {% for community in communities %}
+            <div class="community-result">
+                <h3>{{ community.name }}</h3>
+                <p>{{ community.description }}</p>
+                <span>Members: {{ community.members.count }}</span>
+                <a href="{% url 'community' community.name %}" class="hi">View</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+
+<script>
+    // Simple JavaScript to handle tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-tab');
+            
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+</script>
+
+{% endblock %}
