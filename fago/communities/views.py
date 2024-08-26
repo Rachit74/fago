@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import CreateCommunityForm
 from .models import Community
 from django.http import HttpResponseForbidden
+from posts.models import Post
 
 # Create your views here.
 def explore(request):
@@ -17,13 +18,15 @@ def explore(request):
 # view community method (one particular community)
 def community(request, community):
     community = get_object_or_404(Community, name=community)
-    posts = community.posts.all()
+    posts = community.posts.filter(pinned=False).all()
+    pinned_posts = community.posts.filter(pinned=True).all()
     members = community.members.all()
 
     context = {
         'community': community,
         'members': members,
         'posts': posts,
+        'pinned_posts': pinned_posts,
     }
 
     return render(request, 'communities/community.html', context=context)
@@ -84,3 +87,33 @@ def delete_community(request, community):
 
     messages.warning(request, f'Your community {community_name} was deleted!')
     return redirect('explore-communities')
+
+# Pin post view
+@login_required
+def pin_post(request, post_id):
+    user = request.user
+    post = get_object_or_404(Post, id=post_id)
+    community = post.community
+
+    if not user == community.owner:
+        return HttpResponseForbidden("Forbidden")
+    
+    post.pinned = True
+    post.save()
+    messages.success(request, "Post was pinned")
+    return redirect('community', community=community.name)
+
+# Unpin post view
+@login_required
+def unpin_post(request, post_id):
+    user = request.user
+    post = get_object_or_404(Post, id=post_id)
+    community = post.community
+
+    if not user == community.owner:
+        return HttpResponseForbidden("Forbidden")
+    
+    post.pinned = False
+    post.save()
+    messages.success(request, "Post was unpinned")
+    return redirect('community', community=community.name)
