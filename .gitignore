@@ -3,3 +3,4 @@ fagoenv/
 fago/media/
 media/
 staticfiles/
+db.sqlite3
