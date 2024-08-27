@@ -1,5 +1,4 @@
 from typing import Any
-from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -20,7 +19,7 @@ from django.utils.decorators import method_decorator
 
 # Class Based Views inheritance classes import
 from django.views import View
-from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic import ListView
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -76,20 +75,19 @@ class ReadPostView(FormView):
         messages.success(self.request, "Comment Added!")
         return redirect('read-post',post_id=post.id)
 
-
 # delete post
 @login_required
 def delete_post(request, post_id):
     user = request.user
     post = get_object_or_404(Post, id=post_id)
 
-    if user == post.author:
-        post.delete()
-        messages.success(request, 'Post Deleted!')
-        return redirect('user_profile')
-    else:
+    if not user == post.author:
         messages.error(request, 'Can not delete post!')
         return redirect('read-post', post_id=post.id)
+    
+    post.delete()
+    messages.success(request, 'Post Deleted!')
+    return redirect('user_profile')
 
 # delete comment
 @login_required
@@ -105,70 +103,27 @@ def delete_comment(request, comment_id):
     messages.success(request, 'Comment deleted')
     return redirect('read-post', post_id=comment.post.id)
 
+class CommentReplyView(LoginRequiredMixin, FormView):
+    template_name = 'posts/read_post.html'
+    form_class = CommentForm
+    login_url = 'login'
 
-
-@login_required
-def comment_reply(request, comment_id):
-    user = request.user
-    parent_comment = get_object_or_404(Comment, id=comment_id)
-    post = parent_comment.post
-
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            reply = form.save(commit=False)
-            reply.comment_author = user
-            reply.post=post
-            reply.parent_comment = parent_comment
-            reply.save()
-
-            # send notification
-            comment_author = parent_comment.comment_author
-            notification = Notification.objects.create(
-                notification_for = comment_author,
-                notification_from = reply.comment_author,
-                comment = parent_comment,
-                post = post
-            )
-
-            notification.save()
-
-            messages.success(request, 'Comment Added!')
-            return redirect('read-post', post_id=post.id)
-    else:
-        form = CommentForm()
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        self.parent_comment = get_object_or_404(Comment, id=self.kwargs['comment_id'])
+        self.post = self.parent_comment.post
+        return kwargs
     
-# Delete Notification view
-@login_required
-def delete_notification(request, notification_id):
-    user = request.user
-    notification = get_object_or_404(Notification, id=notification_id)
-    if notification.notification_for == user:
-        notification.delete()
-    else:
-        messages.error("Can not delete notification")
-    
-    return redirect('home')
+    def form_valid(self, form):
+        reply = form.save(commit=False)
+        reply.comment_author = self.request.user
+        reply.parent_comment = self.parent_comment
+        reply.post = self.post
+        reply.save()
 
-@login_required
-def notification(request, notification_id):
-    notification = get_object_or_404(Notification, id=notification_id)
+        messages.success(self.request, "Reply Added!")
+        return redirect('read-post', post_id=self.post.id)
 
-    if notification.notification_for != request.user:
-        messages.error(request, "You do not have permission to view this notification.")
-        return redirect('home')
-
-    post = notification.post
-    comment = notification.comment
-    subcomments = notification.comment.subcomments.all()
-
-    context = {
-        'post': post,
-        'comment': comment,
-        'subcomments': subcomments,
-    }
-
-    return render(request, 'posts/notification.html', context=context)
 
 # Search query view
 def search(request):

@@ -28,7 +28,9 @@
     {% if comment.subcomments.all %}
         <div class="comment-replies">
             {% for subcomment in comment.subcomments.all %}
-                {% include 'comments/comment_item.html' with comment=subcomment %}
+                {% if comment.subcomments.exists %}
+                    {% include 'comments/comment_item.html' with comment=subcomment %}
+                {% endif %}
             {% endfor %}
         </div>
     {% endif %}
