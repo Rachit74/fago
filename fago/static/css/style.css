@@ -1,5 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
 /* Reset and base styles */
 * {
+    font-family: "Merriweather", serif;
+    font-weight: 400;
+    font-style: normal;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -749,60 +754,15 @@ img {
     position: relative;
 }
 
-/* .messages li.success {
-    border-color: #d4edda;
-    background-color: #d4edda;
-    color: #155724;
+.dead {
+    text-decoration: none;
+    color: #333;
+    font-size: 22px;
 }
 
-.messages li.error {
-    border-color: #f8d7da;
-    background-color: #f8d7da;
-    color: #721c24;
+.dead:hover {
+    text-decoration: none;
+    color: #a42621;
+    font-size: 23px;
+    transition: 0.1s;
 }
-
-.messages li.info {
-    border-color: #cce5ff;
-    background-color: #cce5ff;
-    color: #004085;
-}
-
-.messages li.warning {
-    border-color: #fff3cd;
-    background-color: #fff3cd;
-    color: #856404;
-}
-
-.messages li:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    border: 10px solid transparent;
-}
-
-.messages li.success:before {
-    border-left-color: #d4edda;
-}
-
-.messages li.error:before {
-    border-left-color: #f8d7da;
-}
-
-.messages li.info:before {
-    border-left-color: #cce5ff;
-}
-
-.messages li.warning:before {
-    border-left-color: #fff3cd;
-}
-
-.messages li a {
-    color: inherit;
-    text-decoration: underline;
-}
-
-.messages li a:hover {
-    color: #0056b3;
-} */

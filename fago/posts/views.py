@@ -1,3 +1,6 @@
+from typing import Any
+from django.forms import BaseModelForm
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
@@ -17,89 +20,61 @@ from django.utils.decorators import method_decorator
 
 # Class Based Views inheritance classes import
 from django.views import View
-from django.views.generic import DetailView
-from django.views.generic.edit import FormMixin
+from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic.edit import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-# Create your views here.
-def home(request):
-    posts = Post.objects.order_by('-posted_at')
-    context = {
-        'posts': posts,
-    }
-    return render(request, "posts/index.html", context=context)
 
 # Implementation of class based views in cbv_branch
 
-# Create post Class Based View
-class CreatePostView(View):
-    form_class = CreatePostForm # Form class that will be used to display the form
-    template_name = 'posts/create_post.html' # Template that will be rendered
-    
-    """
-    get method handles all the get request
-    in this case the get methods renders the CreatePostForm on create_post.html
-    """
-    @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(user=request.user)
-        return render(request, self.template_name, {'form': form})
-    
-    """
-    post method handels all the POST requests
-    in this method it handels the data that the form will get as the post request
-    """
-    @method_decorator(login_required)
-    def post(self, request, *args, **kwargs):
-        """
-        passing the user as **kwargs in form
-        check posts/forms.py CreatePostForm for further refrence
-        """
-        form = self.form_class(request.POST, request.FILES, user=request.user)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            messages.success(request, "Post Created!")
-            return redirect('read-post', post_id=post.id)
-        
-        return render(request, self.template_name, {'form': form})
-    
-
-# Read post Class Based View
-class ReadPostView(DetailView, FormMixin):
+# Home List view to list all posts
+class HomeView(ListView):
     model = Post
+    template_name = 'posts/index.html'
+    context_object_name = 'posts'
+
+
+# Create Post view using CreateView class inheritance
+class CreatePostView(LoginRequiredMixin, FormView):
+    form_class = CreatePostForm
+    template_name = 'posts/create_post.html'
+    login_url = 'login'
+
+    def get_form(self, *args, **kwargs):
+        form = super().get_form(*args, **kwargs)
+        form.fields['community'].queryset = Community.objects.filter(members=self.request.user)
+        return form
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = self.request.user
+        post.save()
+        messages.success(self.request, "Post Added!")
+        return redirect('read-post', post_id=post.id)
+
+class ReadPostView(FormView):
     template_name = 'posts/read_post.html'
-    context_object_name = 'post'
-    # the id that the class will look for in the url
-    pk_url_kwarg = 'post_id'
-
     form_class = CommentForm
-    success_url = 'home'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        post = self.object
-        comments = Comment.objects.filter(post=post).order_by('-comment_at')
+        post_id = self.kwargs['post_id']
+        comments = Comment.objects.filter(post=post_id)
+        context['post'] = get_object_or_404(Post, id=post_id)
         context['comments'] = comments
-        # Because we need to pass the form in the get request too
-        context['form'] = self.get_form()            
         return context
     
-    @method_decorator(login_required)
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = self.object
-            comment.comment_author = request.user
-            comment.save()
-            messages.success(request, "Comment Added!")
-            return redirect(self.get_success_url())
-
-    def get_success_url(self) -> str:
-        return reverse('read-post', kwargs={'post_id': self.object.id})
+    def form_valid(self, form: Any):
+        if not self.request.user.is_authenticated:
+            return redirect('login')
+        
+        post = self.get_context_data()['post']
+        comment = form.save(commit=False)
+        comment.comment_author = self.request.user
+        comment.post = post
+        comment.save()
+        messages.success(self.request, "Comment Added!")
+        return redirect('read-post',post_id=post.id)
 
 
 # delete post
@@ -111,7 +86,7 @@ def delete_post(request, post_id):
     if user == post.author:
         post.delete()
         messages.success(request, 'Post Deleted!')
-        return redirect('home')
+        return redirect('user_profile')
     else:
         messages.error(request, 'Can not delete post!')
         return redirect('read-post', post_id=post.id)

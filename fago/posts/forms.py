@@ -13,12 +13,12 @@ class CreatePostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content', 'image', 'community']
 
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)  # Extract user from kwargs
-        super().__init__(*args, **kwargs)  # Call the parent class's __init__ method
-        if user:
-            # Filter communities to only those the user is a member of
-            self.fields['community'].queryset = Community.objects.filter(members=user)
+    # def __init__(self, *args, **kwargs):
+    #     user = kwargs.pop('user', None)  # Extract user from kwargs
+    #     super().__init__(*args, **kwargs)  # Call the parent class's __init__ method
+    #     if user:
+    #         # Filter communities to only those the user is a member of
+    #         self.fields['community'].queryset = Community.objects.filter(members=user)
 
 # Comment Form
 class CommentForm(forms.ModelForm):

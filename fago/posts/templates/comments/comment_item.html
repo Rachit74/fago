@@ -3,13 +3,13 @@
     <div class="comment-header">
         <img src="{{ comment.comment_author.userprofile.profile_picture.url }}" alt="User Avatar" class="comment-avatar">
         {% if comment.comment_author == comment.post.author %}
-        <span class="comment-author">{{ comment.comment_author }} <span class="special">Author</span></span>
+        <span class="comment-author">{{ comment.comment_author.first_name }} <span class="special">Author</span></span>
         {% else %}
         <span class="comment-author">{{ comment.comment_author }}</span>
         {% endif %}
         <span class="comment-date">{{ comment.comment_at|naturaltime }}</span>
     </div>
-    <p>{{ comment.comment }}</p>
+    <p>{{ comment.comment|linebreaksbr }}</p>
     <div class="comment-actions">
         {% if user.is_authenticated %}
         <a href="#" class="show-link" onclick="toggleBox(event, 'reply-box-{{ comment.id }}')">Reply</a>
