@@ -37,21 +37,6 @@ class CommunityView(DetailView):
 
         return context
 
-# # view community method (one particular community)
-# def community(request, community):
-#     community = get_object_or_404(Community, name=community)
-#     posts = community.posts.filter(pinned=False).all()
-#     pinned_posts = community.posts.filter(pinned=True).all()
-#     members = community.members.all()
-
-#     context = {
-#         'community': community,
-#         'members': members,
-#         'posts': posts,
-#         'pinned_posts': pinned_posts,
-#     }
-
-#     return render(request, 'communities/community.html', context=context)
 
 class CreateCommunityView(LoginRequiredMixin, FormView):
     template_name = 'communities/create_com.html'
@@ -64,31 +49,9 @@ class CreateCommunityView(LoginRequiredMixin, FormView):
         community.owner = self.request.user
         community.members.add(self.request.user)
         community.save()
+        
         messages.success(self.request, "Your Community Was Created!")
         return redirect('community', community=community.name)
-
-@login_required
-def create_community(request):
-    user = request.user
-    if request.method == "POST":
-        form = CreateCommunityForm(request.POST)
-        if form.is_valid():
-            community = form.save(commit=False)
-            community.owner = user
-            community.save()
-            community.members.add(user)
-            community.save()
-
-            messages.success(request, "Your community has been created!")
-            return redirect('community', community=community.name)
-    else:
-        form = CreateCommunityForm()
-
-    context = {
-        'form':form
-    }
-
-    return render(request, 'communities/create_com.html', context=context)
 
 @login_required
 def join_community(request, community):

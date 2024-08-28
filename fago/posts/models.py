@@ -17,6 +17,7 @@ class Post(models.Model):
     posted_at = models.DateTimeField(timezone.now, default=timezone.now)
     community = models.ForeignKey(Community, related_name='posts', on_delete=models.CASCADE, default=None, null=True)
     pinned = models.BooleanField(default=False)
+    # archived = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.title
