@@ -3,12 +3,11 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
-
 # Form Imports
 from .forms import CreatePostForm, CommentForm
 
 # Model imports
-from .models import Post, Comment, Notification
+from .models import Post, Comment
 from communities.models import Community
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -24,7 +23,6 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-# Implementation of class based views in cbv_branch
 
 # Home List view to list all posts
 class HomeView(ListView):
@@ -124,21 +122,22 @@ class CommentReplyView(LoginRequiredMixin, FormView):
         messages.success(self.request, "Reply Added!")
         return redirect('read-post', post_id=self.post.id)
 
+class Search(View):
+    """
+    get function
+    """
+    def get(self, request):
+        query = self.request.GET.get('query', '')
 
-# Search query view
-def search(request):
+        users = User.objects.filter(Q(username__contains=query))
+        posts = Post.objects.filter(Q(title__contains=query) | Q(content__contains=query))
+        communities = Community.objects.filter(Q(name__contains=query))
 
-    query = request.GET.get('query', '')
+        context = {
+                'users':users,
+                'posts':posts,
+                'communities':communities,
+                'query': query,
+                }
+        return render(self.request, 'posts/search.html', context=context)
 
-
-    users = User.objects.filter(Q(username__contains=query))
-    posts = Post.objects.filter(Q(title__contains=query) | Q(content__contains=query))
-    communities = Community.objects.filter(Q(name__contains=query))
-
-    context = {
-        'users': users,
-        'posts': posts,
-        'communities': communities,
-    }
-
-    return render(request, 'posts/search.html', context=context)

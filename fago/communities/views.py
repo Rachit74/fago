@@ -1,35 +1,71 @@
+from typing import Any
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import CreateCommunityForm
 from .models import Community
-from django.http import HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden
 from posts.models import Post
 
-# Create your views here.
-def explore(request):
-    communities = Community.objects.all()
-    context = {
-        'communities': communities
-    }
+from django.views.generic import ListView, DetailView, FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-    return render(request, 'communities/explore.html', context=context)
+class ExploreView(ListView):
+    """
+    List View used to simply show a list of objects
+    takes the following
+    model_name, template_name, context_name
+    for more: https://docs.djangoproject.com/en/5.1/ref/class-based-views/generic-display/#listview
+    """
+    model = Community
+    template_name = 'communities/explore.html'
+    context_object_name = 'communities'
 
-# view community method (one particular community)
-def community(request, community):
-    community = get_object_or_404(Community, name=community)
-    posts = community.posts.filter(pinned=False).all()
-    pinned_posts = community.posts.filter(pinned=True).all()
-    members = community.members.all()
+class CommunityView(DetailView):
+    model = Community
+    template_name = 'communities/community.html'
+    context_object_name = 'community'
+    slug_field = 'name'
+    slug_url_kwarg = 'community'
 
-    context = {
-        'community': community,
-        'members': members,
-        'posts': posts,
-        'pinned_posts': pinned_posts,
-    }
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context =  super().get_context_data(**kwargs)
+        community = self.object
+        context['posts'] = community.posts.filter(pinned=False).all()
+        context['pinned_posts'] = community.posts.filter(pinned=True).all()
+        context['members'] = community.members.all()
 
-    return render(request, 'communities/community.html', context=context)
+        return context
+
+# # view community method (one particular community)
+# def community(request, community):
+#     community = get_object_or_404(Community, name=community)
+#     posts = community.posts.filter(pinned=False).all()
+#     pinned_posts = community.posts.filter(pinned=True).all()
+#     members = community.members.all()
+
+#     context = {
+#         'community': community,
+#         'members': members,
+#         'posts': posts,
+#         'pinned_posts': pinned_posts,
+#     }
+
+#     return render(request, 'communities/community.html', context=context)
+
+class CreateCommunityView(LoginRequiredMixin, FormView):
+    template_name = 'communities/create_com.html'
+    form_class = CreateCommunityForm
+    login_url = 'login'
+
+    def form_valid(self, form: Any):
+        form =  super().form_valid(form)
+        community = form.save(commit=False)
+        community.owner = self.request.user
+        community.members.add(self.request.user)
+        community.save()
+        messages.success(self.request, "Your Community Was Created!")
+        return redirect('community', community=community.name)
 
 @login_required
 def create_community(request):
