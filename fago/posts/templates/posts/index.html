@@ -11,6 +11,12 @@
                 <div class="card-body">
                     <h2 class="card-title">{{ post.title }}</h2>
                     <hr>
+                    {% if post.image %}
+                    <a href="#" onclick="imageToggle({{ post.id }}); return false;" id="image-toggle-link-{{ post.id }}">Collapse Image</a><br>
+                    <div class="post-image" id="post-image-{{ post.id }}" style="display: block;">
+                        <img src="{{ post.image.url }}" alt="" height="400px" width="400px">
+                    </div>
+                    {% endif %}
                     <p>{{ post.content|linebreaksbr }}</p>
                     <div class="post-meta d-flex align-items-center mt-3">
                         <!-- User profile picture -->

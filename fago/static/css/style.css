@@ -1,118 +1,115 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
-
 * {
     font-family: 'IBM Plex Sans', serif;
 }
 
+body {
+    background-color: #f4f4f4;
+}
+
+/* Navbar */
 .custom-navbar {
     background-color: #790000;
 }
 
-.custom-navbar a{
+.custom-navbar a {
     color: white;
 }
 
-.recent-files {
-    background-color: #790000;
-    color: white;
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
+/* Cards */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+}
+
+.card h2 {
+    font-family: 'Merriweather', serif;
+}
+
+.card-footer {
+    text-align: left;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-footer a {
+    color: #790000;
+    text-decoration: none;
+}
+
+.card-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 576px) {
+    .card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .card-footer .lnks {
+        margin-top: 0.5rem;
+    }
+}
+
+/* Alerts */
 .alert {
     background: #790000;
     color: white;
 }
 
-.lnks a{
+/* Links */
+.lnks a {
     color: #790000;
     text-decoration: underline;
 }
 
-.lnks a:hover{
+.lnks a:hover {
     text-decoration: none;
-}
-
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-  }
-
-
-  body {
-    background-color: #f4f4f4; /* Light background color for the page */
-}
-
-.card {
-    background-color: #ffffff; /* White background for the card */
-    border: 1px solid #ddd; /* Light border around the card */
-}
-
-.card h2 {
-    /* color: #0C4B33; Dark green color for the heading */
-    font-family: 'Merriweather', serif;
-}
-
-.btn-dark {
-    background-color: #790000; /* Dark green color for the button */
-    border: none; /* Remove default border */
-    color: white; /* White text color */
-}
-
-.btn-dark:hover {
-    background-color: #790000; /* Darker green on hover */
 }
 
 .text-primary {
-    color: #790000; /* Primary color for links */
+    color: #790000;
 }
 
 .text-primary:hover {
-    color: #790000; /* Darker green on hover */
+    color: #790000;
 }
 
-.card-footer {
-    text-align: left;
-  }
-  
-  .card-footer a {
-    color: #790000; /* Customize the color */
-    text-decoration: none;
-  }
-  
-  .card-footer a:hover {
-    text-decoration: underline;
-  }
-
- .btn-custom {
-    background-color: #790000; /* Custom background color */
-    color: #fff; /* Text color */
-    border: none; /* Remove border */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Custom border radius */
-    padding: 5px 10px; /* Smaller padding for a smaller button */
-    font-size: 14px; /* Smaller font size */
-
-}
-
-.btn-custom:hover {
-    background-color: #790000; /* Darker background on hover */
-    color: #fff; /* Ensure text color stays white */
-}
-
-.search-bar {
-    border-radius: 10px;
-}
-
-.search-bar:focus {
-    outline: none; /* Remove default outline */
-    box-shadow: 0 0 2px 2px #790000; /* Custom focus glow color */
-}
-
-
-.csb {
+/* Buttons */
+.btn-dark,
+.btn-custom {
     background-color: #790000;
-    color: #fff;
+    border: none;
+    color: white;
 }
 
+.btn-dark:hover,
+.btn-custom:hover {
+    background-color: #790000;
+}
+
+.submit-button {
+    margin-top: 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+/* Forms */
 .form-group {
     margin-bottom: 1rem;
 }
@@ -127,21 +124,15 @@
     width: 100%;
     padding: .375rem .75rem;
     font-size: 1rem;
-    line-height: 1.5;
     border: 1px solid #ced4da;
     border-radius: .25rem;
-}
-
-.form-text {
-    margin-top: .25rem;
-    color: #6c757d;
 }
 
 .text-danger {
     color: #dc3545;
 }
 
-/* Directly apply styles to form fields */
+/* Inputs */
 input[type="text"],
 input[type="password"] {
     width: 100%;
@@ -149,64 +140,31 @@ input[type="password"] {
     border: 1px solid #ced4da;
     border-radius: .25rem;
     font-size: 1rem;
-    line-height: 1.5;
 }
 
-.card-footer {
-    text-align: left;
-    display: flex;
-    flex-wrap: wrap; /* Allows wrapping of content */
-    justify-content: space-between;
-    align-items: center;
+/* File Section */
+.recent-files {
+    background-color: #790000;
+    color: white;
 }
 
-.card-footer .badge.csb {
-    margin-bottom: 0.5rem;
+/* Search Bar */
+.search-bar {
+    border-radius: 10px;
 }
 
-.card-footer .lnks {
-    margin-left: auto;
-    display: flex;
-    flex-wrap: wrap; /* Wraps links to new lines if needed */
+.search-bar:focus {
+    outline: none;
+    box-shadow: 0 0 2px 2px #790000;
 }
 
-.card-footer .lnks a {
-    margin-left: 0.5rem;
-    white-space: nowrap; /* Prevents text from breaking */
-}
-
-.card-footer a {
-    color: #790000;
-    text-decoration: none;
-}
-
-.card-footer a:hover {
-    text-decoration: underline;
-}
-
-/* Ensure that the layout is still functional on small screens */
-@media (max-width: 576px) {
-    .card-footer {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .card-footer .lnks {
-        margin-left: 0;
-        margin-top: 0.5rem;
-    }
-
-    .card-footer .lnks a {
-        margin-left: 0;
-        margin-right: 0.5rem;
-    }
-}
-
-.list-group-item a{
+/* List Group */
+.list-group-item a {
     text-decoration: none;
     color: black;
 }
 
+/* Post Container */
 .post-container {
     max-width: 800px;
     margin: 0 auto;
@@ -224,12 +182,13 @@ input[type="password"] {
 }
 
 .post-image {
-    max-width: 100%;  /* Ensures the image will not exceed the width of its container */
-    max-height: 400px; /* Set your desired maximum height */
-    height: auto;  /* Maintains aspect ratio */
+    max-width: 100%;
+    max-height: 400px;
+    height: auto;
     margin-bottom: 10px;
 }
 
+/* Comments */
 .comments {
     margin-top: 20px;
 }
@@ -263,12 +222,6 @@ input[type="password"] {
     font-weight: bold;
 }
 
-.special {
-    color: #f08c00;
-    font-size: 13px;
-    margin-left: 5px;
-}
-
 .comment-date {
     margin-left: auto;
     font-size: 12px;
@@ -280,6 +233,7 @@ input[type="password"] {
     font-size: 14px;
 }
 
+/* Comment Actions */
 .comment-actions {
     margin-top: 5px;
 }
@@ -295,37 +249,85 @@ input[type="password"] {
     text-decoration: underline;
 }
 
+/* Comment Box */
+.comment-box {
+    margin-top: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.comment-form textarea,
+.comment-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.comment-form .submit-button {
+    background-color: #28a745;
+    padding: 8px 16px;
+    border-radius: 5px;
+}
+
+.comment-form .submit-button:hover {
+    background-color: #218838;
+}
+
+/* Reply Box */
 .reply-box {
     margin-top: 10px;
-    margin-left: 30px;
-    display: none;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.reply-form {
-    display: flex;
-    flex-direction: column;
+.reply-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
-.submit-button {
-    margin-top: 5px;
-    padding: 5px 10px;
-    border: none;
+.reply-form .submit-button {
     background-color: #007bff;
-    color: white;
-    border-radius: 3px;
-    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 5px;
 }
 
-.submit-button:hover {
+.reply-form .submit-button:hover {
     background-color: #0056b3;
 }
 
-.hidden {
-    display: none;
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .comment-box,
+    .reply-box {
+        padding: 10px;
+    }
+
+    .comment-form .submit-button,
+    .reply-form .submit-button {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
 }
 
-.comment-replies {
-    margin-left: 20px;
-    border-left: 2px solid #e1e1e1;
-    padding-left: 10px;
+.special {
+    color: rgb(236, 127, 3);
+}
+
+.mod-special {
+    color: #cf1427;
 }

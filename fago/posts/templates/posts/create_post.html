@@ -2,21 +2,70 @@
 {% block title %}FaGo | Create Post{% endblock %}
 
 {% block content %}
-<main class="container">
-    <form class="post-form" method="POST" action="{% url 'create-post' %}" enctype="multipart/form-data">
-        <h1>Add a New Post</h1>
-        {% csrf_token %}
-        {{ form }}
-        <!-- <input type="text" placeholder="Post Title" required> -->
-        <!-- <textarea placeholder="Post Content" required></textarea>
-        <input type="file" accept="image/*">
-        <select required>
-            <option value="" disabled selected>Select Community</option>
-            <option value="technology">Technology</option>
-            <option value="science">Science</option>
-            <option value="arts">Arts & Culture</option>
-        </select> -->
-        <button type="submit" class="btn">Add Post</button>
-    </form>
+<main class="container mt-5">
+    <div class="card shadow-sm p-4">
+        <h1 class="mb-4">Add a New Post</h1>
+        <form class="post-form" method="POST" action="{% url 'create-post' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Display non-field errors -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger mb-3">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- Title Field -->
+            <div class="mb-3">
+                <label for="{{ form.title.id_for_label }}" class="form-label">{{ form.title.label }}</label>
+                <input type="text" name="{{ form.title.html_name }}" id="{{ form.title.id_for_label }}" class="form-control" value="{{ form.title.value|default_if_none:'' }}" {% if form.title.field.required %}required{% endif %}>
+                {% if form.title.errors %}
+                    <div class="form-text text-danger">
+                        {{ form.title.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Content Field -->
+            <div class="mb-3">
+                <label for="{{ form.content.id_for_label }}" class="form-label">{{ form.content.label }}</label>
+                <textarea name="{{ form.content.html_name }}" id="{{ form.content.id_for_label }}" class="form-control" {% if form.content.field.required %}required{% endif %}>{{ form.content.value|default_if_none:'' }}</textarea>
+                {% if form.content.errors %}
+                    <div class="form-text text-danger">
+                        {{ form.content.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Image Field -->
+            <div class="mb-3">
+                <label for="{{ form.image.id_for_label }}" class="form-label">{{ form.image.label }}</label>
+                <input type="file" name="{{ form.image.html_name }}" id="{{ form.image.id_for_label }}" class="form-control" {% if form.image.field.required %}required{% endif %}>
+                {% if form.image.errors %}
+                    <div class="form-text text-danger">
+                        {{ form.image.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Community Field -->
+            <div class="mb-3">
+                <label for="{{ form.community.id_for_label }}" class="form-label">{{ form.community.label }}</label>
+                <select name="{{ form.community.html_name }}" id="{{ form.community.id_for_label }}" class="form-select" {% if form.community.field.required %}required{% endif %}>
+                    {% for choice in form.community.field.queryset %}
+                        <option value="{{ choice.pk }}" {% if choice.pk == form.community.value %}selected{% endif %}>{{ choice }}</option>
+                    {% endfor %}
+                </select>
+                {% if form.community.errors %}
+                    <div class="form-text text-danger">
+                        {{ form.community.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Add Post</button>
+        </form>
+    </div>
 </main>
 {% endblock %}

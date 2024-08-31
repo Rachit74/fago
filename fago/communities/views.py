@@ -35,23 +35,27 @@ class CommunityView(DetailView):
         context['pinned_posts'] = community.posts.filter(pinned=True).all()
         context['members'] = community.members.all()
 
-        return context
+        return context    
 
-
-class CreateCommunityView(LoginRequiredMixin, FormView):
-    template_name = 'communities/create_com.html'
-    form_class = CreateCommunityForm
-    login_url = 'login'
-
-    def form_valid(self, form: Any):
-        form =  super().form_valid(form)
+@login_required
+def create_community(request):
+    if request.method == "POST":
+        form = CreateCommunityForm(request.POST, request.FILES)
         community = form.save(commit=False)
-        community.owner = self.request.user
-        community.members.add(self.request.user)
+        community.owner = request.user
         community.save()
-        
-        messages.success(self.request, "Your Community Was Created!")
+        community.members.add(request.user)
+
+        messages.success(request, "Your community was created!")
         return redirect('community', community=community.name)
+    else:
+        form = CreateCommunityForm()
+    
+    context = {
+        'form' : form
+    }
+
+    return render(request, 'communities/create_com.html', context=context)
 
 @login_required
 def join_community(request, community):
@@ -80,7 +84,7 @@ def delete_community(request, community):
     community_name = community.name
 
     if not user == community.owner:
-        return HttpResponseForbidden("Forbidden")
+        return HttpResponseForbidden("Forbidden!")
     else:
         community.delete()
 

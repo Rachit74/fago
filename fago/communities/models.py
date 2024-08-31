@@ -9,6 +9,11 @@ class Community(models.Model):
     description = models.TextField()
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     members = models.ManyToManyField(User, related_name='communities')
+    banner = models.ImageField(
+        upload_to=settings.COMMUNITY_BANNER_DIR,
+        blank=True,
+        null=True,
+    )
 
     def __str__(self) -> str:
         return self.name

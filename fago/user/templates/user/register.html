@@ -1,29 +1,123 @@
 {% extends 'posts/base.html' %}
 
-{% block title %} Register {% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block content %}
-
 <main class="container">
     <form class="auth-form" method="POST" action="{% url 'register' %}">
         <h1>Sign Up</h1>
         {% csrf_token %}
-            {% for field in form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {% if field.errors %}
-                        <div class="field-errors">
-                            {% for error in field.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        <button type="submit" class="btn">Register</button>
-        <p>Already have an account? <a href="login.html" class="hi">Log in</a></p>
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="field-errors">
+                        {% for error in field.errors %}
+                            <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Register</button>
+        <p>Already have an account? <a href="{% url 'login' %}" class="hi">Log in</a></p>
     </form>
 </main>
+
+<style>
+    /* Main container styling */
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Authentication form styling */
+    .auth-form {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+    }
+    
+    .auth-form h1 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        text-align: center;
+        color: #333;
+    }
+    
+    .auth-form .btn {
+        width: 100%;
+        padding: 10px;
+        margin-top: 15px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .auth-form .btn:hover {
+        background-color: #0056b3;
+    }
+    
+    .auth-form p {
+        margin-top: 15px;
+        text-align: center;
+        font-size: 14px;
+        color: #555;
+    }
+    
+    .auth-form .hi {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    
+    .auth-form .hi:hover {
+        text-decoration: underline;
+    }
+    
+    /* Form fields styling */
+    .auth-form .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .auth-form .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+    
+    .auth-form .form-group input,
+    .auth-form .form-group select,
+    .auth-form .form-group textarea {
+        width: calc(100% - 20px);
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    
+    .auth-form .field-errors {
+        margin-top: 5px;
+    }
+    
+    .auth-form .error-message {
+        color: #ff0000;
+        font-size: 12px;
+    }
+    </style>
 
 {% endblock %}

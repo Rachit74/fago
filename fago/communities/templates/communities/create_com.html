@@ -1,14 +1,35 @@
 {% extends 'posts/base.html' %}
 
-{% block title %} Communitites {% endblock %}
+{% block title %}Create a Community{% endblock %}
 
 {% block content %}
-<main class="container">
-    <form class="community-form" method="POST" action="{% url 'create-community' %}">
-        <h1>Create a New Community</h1>
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit" class="btn">Create Community</button>
-    </form>
+<main class="container my-5">
+    <div class="card p-4 shadow-sm">
+        <h1 class="mb-4">Create a New Community</h1>
+        <form method="POST" action="{% url 'create-community' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Community Name -->
+            <div class="mb-3">
+                <label for="id_name" class="form-label">Community Name</label>
+                {{ form.name }}
+            </div>
+            
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="id_description" class="form-label">Description</label>
+                {{ form.description }}
+            </div>
+            
+            <!-- Community Banner -->
+            <div class="mb-3">
+                <label for="id_banner" class="form-label">Banner Image</label>
+                {{ form.banner }}
+            </div>
+            
+            <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Create Community</button>
+        </form>
+    </div>
 </main>
 {% endblock %}

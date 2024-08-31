@@ -142,6 +142,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # different types of media
 PROFILE_PICS_DIR = 'profile_pics'
 POSTS_PICS_DIR = 'posts_pics'
-COMMUNITY_BANNER_DIR = 'community_banners'
+COMMUNITY_BANNER_DIR = 'banner_pics'
 
 LOGIN_URL = 'login'

@@ -6,4 +6,4 @@ class CreateCommunityForm(forms.ModelForm):
     
     class Meta:
         model = Community
-        fields = ['name', 'description']
+        fields = ['name', 'description', 'banner']

@@ -1,45 +1,49 @@
 {% extends 'posts/base.html' %}
 
-{% block title %} {{ community.name }} {% endblock %}
+{% block title %}
+    {{ community.name }}
+{% endblock %}
 
 {% block content %}
-
 <main class="container">
     <div class="community-header">
         <h1>{{ community.name }}</h1>
         <p>{{ community.description }}</p>
     </div>
+
     <div class="posts">
+        <!-- Display pinned posts -->
         {% for post in pinned_posts %}
         <div class="post">
-            <h2>{{ post.title }} <span class="special">Pinned</span></h2>
-            {% if user == community.owner %}
-            <a href="{% url 'unpin' post.id %}" class="hi">Unpin Post</a>
-            {% endif %}
+            <h2>{{ post.title }}</h2><span class="special" style="font-weight: bold;">Pinned</span> <br>
             <p>{{ post.content|linebreaksbr }}</p>
             <div class="post-meta">
                 <span>Posted by: {{ post.author }}</span>
-                <!-- <span>Upvotes: 15</span> -->
                 <span>Comments: {{ post.comment_set.count }}</span>
             </div>
-            <a href="{% url 'read-post' post.id %}" class="hi">Comments</a>
+            <a href="{% url 'read-post' post.id %}" class="hi">Comments</a><br>
+            {% if user == community.owner %}
+            <a href="{% url 'unpin' post.id %}" class="mod-special">Unpin</a>
+            {% endif %}
         </div>
+        <hr>
         {% endfor %}
-
+        <hr>
+        <!-- Display other posts -->
         {% for post in posts reversed %}
         <div class="post">
             <h2>{{ post.title }}</h2>
-            {% if user == community.owner %}
-            <a href="{% url 'pin' post.id %}" class="hi">Pin Post</a>
-            {% endif %}
             <p>{{ post.content|linebreaksbr }}</p>
             <div class="post-meta">
                 <span>Posted by: {{ post.author }}</span>
-                <!-- <span>Upvotes: 15</span> -->
                 <span>Comments: {{ post.comment_set.count }}</span>
             </div>
-            <a href="{% url 'read-post' post.id %}" class="hi">Comments</a>
+            <a href="{% url 'read-post' post.id %}" class="hi">Comments</a><br>
+            {% if user == community.owner %}
+            <a href="{% url 'pin' post.id %}" class="mod-special">Pin</a>
+            {% endif %}
         </div>
+        <hr>
         {% endfor %}
     </div>
 </main>

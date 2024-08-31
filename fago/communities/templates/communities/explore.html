@@ -3,22 +3,31 @@
 {% block title %}Communities{% endblock %}
 
 {% block content %}
+<main class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Explore Communities</h1>
+        <a href="{% url 'create-community' %}" class="btn btn-primary">Create Community</a>
+    </div>
 
-<main class="container">
-    <h1>Explore Communities</h1><a href="{% url 'create-community' %}" class="hi">Create Community</a>
-    <div class="communities">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for community in communities %}
-        <div class="community-card">
-            <h2>{{ community.name }}</h2>
-            <p>{{ community.description }}</p>
-                {% if community in user.communities.all %}
-                <a href="{% url 'community' community.name %}" class="btn">View</a>
-                {% else %}
-                <a href="{% url 'join-community' community.name %}" class="btn">Join Community</a>
-                {% endif %}
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="{{ community.banner.url }}" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-title">{{ community.name }}</h5>
+                  <p class="card-text">{{ community.description|truncatewords:20 }}</p>
+                  {% if community in user.communities.all %}
+                  <a href="{% url 'community' community.name %}" class="btn btn-primary">View</a>
+                  {% else %}
+                  <a href="{% url 'community' community.name %}" class="btn btn-primary">View</a>
+                  <a href="{% url 'join-community' community.name %}" class="btn btn-primary">Join Community</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
         </div>
         {% endfor %}
     </div>
 </main>
-
 {% endblock %}

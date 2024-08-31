@@ -25,13 +25,13 @@
 
         <!-- Comment Form Toggle -->
         {% if user.is_authenticated %}
-        <a href="#" class="show-link" onclick="toggleBox(event, 'comment-box')">Add a Comment</a>
+        <a href="" class="show-link" onclick="commentBoxToggle(); return false;">Add a Comment</a>
         {% else %}
         <a href="{% url 'login' %}" class="hi">Login</a> to comment
         {% endif %}
 
         <div class="comment-thread">
-            <div class="comment-box hidden" id="comment-box">
+            <div class="comment-box hidden" id="comment-box" style="display: none;">
                 <form action="{% url 'read-post' post.id %}" method="POST" class="comment-form">
                     {% csrf_token %}
                     {{ form.as_p }}
@@ -48,25 +48,4 @@
         </div>
     </section>
 </main>
-
-<script>
-function toggleVisibility(elementId) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.classList.toggle('hidden');
-    }
-}
-</script>
-
-<script>
-    function toggleBox(event, boxId) {
-        event.preventDefault();
-        const box = document.getElementById(boxId);
-        if (box) {
-            box.classList.toggle('hidden');
-        } else {
-            console.error('Element with id ' + boxId + ' not found');
-        }
-    }
-    </script>
 {% endblock %}

@@ -3,28 +3,26 @@
     <div class="comment-header">
         <img src="{{ comment.comment_author.userprofile.profile_picture.url }}" alt="User Avatar" class="comment-avatar">
         {% if comment.comment_author == comment.post.author %}
-        <span class="comment-author">{{ comment.comment_author.first_name }} <span class="special">Author</span></span>
+            <span class="comment-author">{{ comment.comment_author.first_name }} <span class="special">Author</span></span>
         {% else %}
-        <span class="comment-author">{{ comment.comment_author.first_name }}</span>
+            <span class="comment-author">{{ comment.comment_author.first_name }}</span>
         {% endif %}
         <span class="comment-date">{{ comment.comment_at|naturaltime }}</span>
     </div>
     <p class="comment-text">{{ comment.comment|linebreaksbr }}</p>
     <div class="comment-actions">
         {% if user.is_authenticated %}
-        <a href="#" class="show-link" onclick="toggleBox(event, 'comment-box')">Add a Comment</a>
+            <a href="#" class="show-link" onclick="replyBoxToggle({{ comment.id }}); return false;">Reply</a>
         {% endif %}
     </div>
-
     <!-- Reply Box -->
-    <div id="reply-box-{{ comment.id }}" class="reply-box hidden">
+    <div id="reply-box-{{ comment.id }}" class="reply-box hidden" style="display: none;">
         <form action="{% url 'comment-reply' comment.id %}" method="POST" class="reply-form">
             {% csrf_token %}
             {{ form.as_p }}
-            <button class="submit-button">Post Reply</button>
+            <button type="submit" class="submit-button">Post Reply</button>
         </form>
     </div>
-
     <!-- Subcomments (Replies) -->
     {% if comment.subcomments.all %}
         <div class="comment-replies">
@@ -34,11 +32,3 @@
         </div>
     {% endif %}
 </div>
-
-<script>
-    function toggleBox(event, boxId) {
-    event.preventDefault();
-    const box = document.getElementById(boxId);
-    box.classList.toggle('hidden');
-}
-</script>
