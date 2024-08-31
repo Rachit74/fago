@@ -4,7 +4,7 @@
 {% block content %}
 {% load humanize %}
 
-<main class="container">
+<main class="post-container">
     <article class="full-post">
         <h1>{{ post.title }}</h1>
         <div class="post-meta">
@@ -23,22 +23,23 @@
     <section class="comments">
         <h2>Comments</h2>
 
-        <!-- comment form toggle -->
-            {% if user.is_authenticated %}
-            <a href="#" class="show-link" onclick="toggleBox(event, 'comment-box')">Add a Comment</a>
-            {% else %}
-            <a href="{% url 'login' %}" class="hi">Login</a> to comment
-            {% endif %}
+        <!-- Comment Form Toggle -->
+        {% if user.is_authenticated %}
+        <a href="#" class="show-link" onclick="toggleBox(event, 'comment-box')">Add a Comment</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="hi">Login</a> to comment
+        {% endif %}
 
-            <div class="comment-thread">
-                <div class="comment-box" id="comment-box">
-                    <form action="{% url 'read-post' post.id %}" method="POST">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button>Post Comment</button>
-                    </form>
-                </div>
-            <!--  -->
+        <div class="comment-thread">
+            <div class="comment-box hidden" id="comment-box">
+                <form action="{% url 'read-post' post.id %}" method="POST" class="comment-form">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="submit-button">Post Comment</button>
+                </form>
+            </div>
+
+            <!-- Comments Section -->
             {% for comment in comments reversed %}
                 {% if comment.is_parent %}
                     {% include 'comments/comment_item.html' with comment=comment %}
@@ -49,10 +50,23 @@
 </main>
 
 <script>
+function toggleVisibility(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.classList.toggle('hidden');
+    }
+}
+</script>
+
+<script>
     function toggleBox(event, boxId) {
         event.preventDefault();
         const box = document.getElementById(boxId);
-        box.classList.toggle('active');
+        if (box) {
+            box.classList.toggle('hidden');
+        } else {
+            console.error('Element with id ' + boxId + ' not found');
+        }
     }
-</script>
+    </script>
 {% endblock %}

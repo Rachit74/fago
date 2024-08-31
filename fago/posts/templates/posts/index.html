@@ -2,22 +2,50 @@
 {% block title %}FaGo | Home{% endblock %}
 
 {% block content %}
-
-<main class="container">
-    <div class="posts">
-        {% for post in posts reversed %}
-        <div class="post">
-            <h2><a href="{% url 'read-post' post.id %}" class="dead">{{ post.title }}</a></h2>
-            <a href="{% url 'community' post.community %}" class="hi">/c/{{ post.community }}</a>
-            <p>{{ post.content|linebreaksbr }}</p>
-            <div class="post-meta">
-                <span>Posted by: {{ post.author }}</span>
-                <!-- <span>Upvotes: 42</span> -->
-                <span>Comments: {{ post.comment_set.count }}</span>
+<div class="container mt-4">
+    <div class="row">
+        <!-- Main content (70%) -->
+        <div class="col-lg-8">
+            {% for post in posts %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <hr>
+                    <p>{{ post.content|linebreaksbr }}</p>
+                    <div class="post-meta d-flex align-items-center mt-3">
+                        <!-- User profile picture -->
+                        <img src="{{ post.author.userprofile.profile_picture.url }}" alt="{{ post.author.username }}'s profile picture" class="rounded-circle mr-2" width="40" height="40">
+                        <div class="ml-2">
+                            <!-- Posted by -->
+                            <span class="text-muted">Posted by: <a href="{% url 'user_profile' %}" class="text-dark">{{ post.author.username }}</a></span>
+                            <br>
+                            <!-- Posted ago -->
+                             {% load humanize %}
+                            <span class="text-muted small">{{ post.posted_at|naturaltime }}</span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="{% url 'read-post' post.id %}" class="btn btn-primary">Read</a>
+                    </div>
+                </div>
             </div>
-            <a href="{% url 'read-post' post.id %}" class="hi">Comments</a>
+            {% empty %}
+            <p class="text-center text-muted">No posts available. Be the first to post something!</p>
+            {% endfor %}
         </div>
-        {% endfor %}
+
+        <div class="col-lg-4">
+            <div class="card">
+              <div class="card-header recent-files">
+                Communities
+              </div>        
+              <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="">hi</a> </li>              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- End of main content -->
     </div>
-</main>
+
+</div>
 {% endblock %}

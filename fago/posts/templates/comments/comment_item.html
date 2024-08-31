@@ -5,33 +5,40 @@
         {% if comment.comment_author == comment.post.author %}
         <span class="comment-author">{{ comment.comment_author.first_name }} <span class="special">Author</span></span>
         {% else %}
-        <span class="comment-author">{{ comment.comment_author }}</span>
+        <span class="comment-author">{{ comment.comment_author.first_name }}</span>
         {% endif %}
         <span class="comment-date">{{ comment.comment_at|naturaltime }}</span>
     </div>
-    <p>{{ comment.comment|linebreaksbr }}</p>
+    <p class="comment-text">{{ comment.comment|linebreaksbr }}</p>
     <div class="comment-actions">
         {% if user.is_authenticated %}
-        <a href="#" class="show-link" onclick="toggleBox(event, 'reply-box-{{ comment.id }}')">Reply</a>
+        <a href="#" class="show-link" onclick="toggleBox(event, 'comment-box')">Add a Comment</a>
         {% endif %}
-        <!-- <button class="btn-link">Upvote</button> -->
     </div>
 
-    <!-- Replies -->
-    <div id="reply-box-{{ comment.id }}" class="reply-box">
-        <form action="{% url 'comment-reply' comment.id %}" method="POST">
+    <!-- Reply Box -->
+    <div id="reply-box-{{ comment.id }}" class="reply-box hidden">
+        <form action="{% url 'comment-reply' comment.id %}" method="POST" class="reply-form">
             {% csrf_token %}
             {{ form.as_p }}
-            <button>Post Reply</button>
+            <button class="submit-button">Post Reply</button>
         </form>
     </div>
+
+    <!-- Subcomments (Replies) -->
     {% if comment.subcomments.all %}
         <div class="comment-replies">
             {% for subcomment in comment.subcomments.all %}
-                {% if comment.subcomments.exists %}
-                    {% include 'comments/comment_item.html' with comment=subcomment %}
-                {% endif %}
+                {% include 'comments/comment_item.html' with comment=subcomment %}
             {% endfor %}
         </div>
     {% endif %}
 </div>
+
+<script>
+    function toggleBox(event, boxId) {
+    event.preventDefault();
+    const box = document.getElementById(boxId);
+    box.classList.toggle('hidden');
+}
+</script>

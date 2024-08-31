@@ -1,54 +1,64 @@
 {% extends 'posts/base.html' %}
 
-{% block title %} FaGo | {{ user.username }} {% endblock %}
+{% block title %}FaGo | {{ user.username }}{% endblock %}
 
 {% block content %}
-
 <main class="container">
-  <div class="profile">
-      <div class="profile-header">
-          <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
-          <div class="profile-info">
-              <h1>{{ user.first_name }}</h1>
-              <p class="username">@{{ user.username }}</p>
-              <p class="email">{{ user.email }}</p>
-              <p class="bio">{{ user.userprofile.profile_bio }}</p>
-              <a href="{% url 'edit-profile' %}" class="btn">Edit Profile</a>
-          </div>
-      </div>
-      <div class="profile-content">
-          <h2>User's Posts</h2>
-          <div class="posts">
-            {% if user_posts %}
-                {% for post in user_posts %}
-                <div class="post">
-                    <h3>{{ post.title }}</h3>
-                    <p>{{ post.content|slice:150 }}... <a href="{% url 'read-post' post.id %}" class="hi">Read More</a></p>
-                    <a href="{% url 'delete-post' post.id %}" class="hi">Delete</a>
-                </div>
-                {% endfor %}
-            {% else %}
-                <span class="hi_span">You have not posted anything yet</span>
-                <h4><a href="{% url 'create-post' %}" class="hi">Post Something</a></h4>
-            {% endif %}
-          <h2>Communities</h2>
-          <div class="communities">
-            {% if user_communities %}
-                {% for community in user_communities %}
-                <div class="community-card">
-                    <h3>{{ community.name }}</h3>
-                    <p>{{ community.description }}</p>
-                    <a href="{% url 'leave-community' community.name %}" class="hi">Leave Community</a><br>
-                    {% if user == community.owner %}
-                    <a href="{% url 'delete-community' community.name %}" class="hi">Delete</a>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            {% else %}
-                <h4><a href="{% url 'explore-communities'  %}" class="hi">Find Communities</a></h4>
-            {% endif %}
-          </div>
-      </div>
-  </div>
+    <section class="profile">
+        <header class="profile-header">
+            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
+            <div class="profile-info">
+                <h1>{{ user.first_name }}</h1>
+                <p class="username">@{{ user.username }}</p>
+                <p class="email">{{ user.email }}</p>
+                <p class="bio">{{ user.userprofile.profile_bio }}</p>
+                <a href="{% url 'edit-profile' %}" class="btn btn-primary">Edit Profile</a>
+            </div>
+        </header>
+
+        <div class="profile-content">
+            <section class="user-posts">
+                <h2>User's Posts</h2>
+                {% if user_posts %}
+                    <div class="posts-grid">
+                        {% for post in user_posts %}
+                            <article class="post-card">
+                                <h3>{{ post.title }}</h3>
+                                <p>{{ post.content|slice:150 }}... 
+                                    <a href="{% url 'read-post' post.id %}" class="read-more">Read More</a>
+                                </p>
+                                <a href="{% url 'delete-post' post.id %}" class="btn btn-danger">Delete</a>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="no-posts-message">You have not posted anything yet</p>
+                    <a href="{% url 'create-post' %}" class="btn btn-success">Post Something</a>
+                {% endif %}
+            </section>
+
+            <section class="user-communities">
+                <h2>Communities</h2>
+                {% if user_communities %}
+                    <div class="communities-grid">
+                        {% for community in user_communities %}
+                            <article class="community-card">
+                                <h3>{{ community.name }}</h3>
+                                <p>{{ community.description }}</p>
+                                <div class="community-actions">
+                                    <a href="{% url 'leave-community' community.name %}" class="btn btn-warning">Leave Community</a>
+                                    {% if user == community.owner %}
+                                        <a href="{% url 'delete-community' community.name %}" class="btn btn-danger">Delete</a>
+                                    {% endif %}
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <a href="{% url 'explore-communities' %}" class="btn btn-info">Find Communities</a>
+                {% endif %}
+            </section>
+        </div>
+    </section>
 </main>
 {% endblock %}
