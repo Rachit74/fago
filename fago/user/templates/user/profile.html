@@ -38,7 +38,9 @@
                 <div class="community-card">
                     <h3>{{ community.name }}</h3>
                     <p>{{ community.description }}</p>
+                    {% if not community.owner == user %}
                     <a href="{% url 'leave-community' community.name %}" class="hi">Leave Community</a><br>
+                    {% endif %}
                     {% if user == community.owner %}
                     <a href="{% url 'delete-community' community.name %}" class="hi">Delete</a>
                     {% endif %}

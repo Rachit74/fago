@@ -7,6 +7,8 @@ from .models import Community
 from django.http import HttpResponse, HttpResponseForbidden
 from posts.models import Post
 
+from django.contrib.auth.models import User
+
 from django.views.generic import ListView, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -38,20 +40,25 @@ class CommunityView(DetailView):
         return context
 
 
-class CreateCommunityView(LoginRequiredMixin, FormView):
-    template_name = 'communities/create_com.html'
-    form_class = CreateCommunityForm
-    login_url = 'login'
-
-    def form_valid(self, form: Any):
-        form =  super().form_valid(form)
+@login_required
+def create_community(request):
+    if request.method == "POST":
+        form = CreateCommunityForm(request.POST)
         community = form.save(commit=False)
-        community.owner = self.request.user
-        community.members.add(self.request.user)
+        community.owner = request.user
         community.save()
-        
-        messages.success(self.request, "Your Community Was Created!")
+        community.members.add(request.user)
+
+        messages.success(request, "Your community was created!")
         return redirect('community', community=community.name)
+    else:
+        form = CreateCommunityForm()
+    
+    context = {
+        'form' : form
+    }
+
+    return render(request, 'communities/create_com.html', context=context)
 
 @login_required
 def join_community(request, community):
@@ -67,6 +74,10 @@ def join_community(request, community):
 def leave_community(request, community):
     user = request.user
     community = get_object_or_404(Community, name=community)
+    if user == community.owner:
+        messages.error(request, "You can not leave the community as the owner!")
+        return redirect('community', community=community.name)
+        
     community.members.remove(user)
     community.save()
 
@@ -116,3 +127,44 @@ def unpin_post(request, post_id):
     post.save()
     messages.success(request, "Post was unpinned")
     return redirect('community', community=community.name)
+
+# Community Admin Views
+
+@login_required
+def dashboard(request, community):
+    community = get_object_or_404(Community, name=community)
+
+    if not community.owner == request.user:
+        return HttpResponseForbidden("Forbidden")
+    
+    members = community.members.all()
+    
+    context = {
+        'community': community,
+        'members': members,
+    }
+
+    return render(request, 'communities/dashboard.html', context=context)
+
+# Community admin kick member
+@login_required
+def admin_kick(request, community, member_id):
+    user = request.user
+    community = get_object_or_404(Community, name=community)
+    member = get_object_or_404(User, id=member_id)
+
+    if not user == community.owner:
+        return HttpResponseForbidden("Forbidden")
+    
+    """
+    This login prevents the community owner from kicking himself out of the community!
+    if the member that is being kicked is the owner of the community that prevent the kick.
+    """
+    if member == community.owner:
+        messages.error(request, "Can not kick yourself from your own community!")
+        return redirect('dashboard', community=community)
+
+    community.members.remove(member)
+
+    messages.success(request, f"{member} was kicked from {community}")
+    return redirect('dashboard', community=community)

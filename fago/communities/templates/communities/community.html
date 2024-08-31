@@ -8,6 +8,11 @@
     <div class="community-header">
         <h1>{{ community.name }}</h1>
         <p>{{ community.description }}</p>
+        {% if user == community.owner %}
+        <div class="com-admin">
+            <a href="{% url 'dashboard' community.name %}">Manange your community</a>
+        </div>
+        {% endif %}
     </div>
     <div class="posts">
         {% for post in pinned_posts %}

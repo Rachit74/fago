@@ -1,0 +1,19 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} {{ community.name }} {% endblock %}
+
+{% block content %}
+
+<main class="container">
+   <div class="community-members">
+    <h3>{{ community.name }} Members</h3>
+        <div class="member">
+            {% for member in members %}
+            {% if not member == community.owner %}
+            {{ member.username }} -> <a href="{% url 'kick' community.name member.id %}">Kick</a>  |  <a href="">Ban</a> <br>
+            {% endif %}
+        {% endfor %}
+        </div>
+   </div>
+</main>
+{% endblock %}
