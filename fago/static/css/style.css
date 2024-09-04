@@ -761,3 +761,12 @@ img {
     font-size: 23px;
     transition: 0.1s;
 }
+
+.image-manager a {
+    text-decoration: none;
+    color: #a42621;
+}
+
+.image-manager a:hover {
+    text-decoration: underline;
+}

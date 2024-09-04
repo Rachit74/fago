@@ -9,7 +9,13 @@
         <div class="post">
             <h2><a href="{% url 'read-post' post.id %}" class="dead">{{ post.title }}</a></h2>
             <a href="{% url 'community' post.community %}" class="hi">/c/{{ post.community }}</a>
-            <p>{{ post.content|linebreaksbr }}</p>
+            {% if post.image %}
+                <div style="margin: 10px; margin-left: 0px;" class="image-manager">
+                    <a href="#"  id="post-toggle-link-{{ post.id }}"  onclick="imageToggle({{ post.id }}); return false;" class="image-toggle-link">Show Image</a>
+                    <img src="{{ post.image.url }}" alt="Unable to load Image" id="post-image-{{ post.id }}" style="display: none;">
+                </div>
+                {% endif %}
+            <p>{{ post.content|linebreaksbr|slice:250 }}...<a href="{% url 'read-post' post.id %}">Read more</a></p>
             <div class="post-meta">
                 <span>Posted by: {{ post.author }}</span>
                 <!-- <span>Upvotes: 42</span> -->

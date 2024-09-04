@@ -21,6 +21,11 @@
             {% if user == community.owner %}
             <a href="{% url 'unpin' post.id %}" class="hi">Unpin Post</a>
             {% endif %}
+            <div style="margin: 10px; margin-left: 0px;">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="Unable to load Image">
+                {% endif  %}
+            </div>
             <p>{{ post.content|linebreaksbr }}</p>
             <div class="post-meta">
                 <span>Posted by: {{ post.author }}</span>
@@ -37,6 +42,11 @@
             {% if user == community.owner %}
             <a href="{% url 'pin' post.id %}" class="hi">Pin Post</a>
             {% endif %}
+            <div style="margin: 10px; margin-left: 0px;">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="Unable to load Image">
+                {% endif  %}
+            </div>
             <p>{{ post.content|linebreaksbr }}</p>
             <div class="post-meta">
                 <span>Posted by: {{ post.author }}</span>

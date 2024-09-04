@@ -60,20 +60,6 @@
         <p>Django-Fago</p>
     </footer>
 
-    <script>
-        const notificationBtn = document.getElementById('notificationBtn');
-        const notificationBox = document.getElementById('notificationBox');
-
-        notificationBtn.addEventListener('click', () => {
-            notificationBox.style.display = notificationBox.style.display === 'block' ? 'none' : 'block';
-        });
-
-        // Close the notification box if clicked outside
-        window.addEventListener('click', (e) => {
-            if (!notificationBtn.contains(e.target) && !notificationBox.contains(e.target)) {
-                notificationBox.style.display = 'none';
-            }
-        });
-    </script>
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

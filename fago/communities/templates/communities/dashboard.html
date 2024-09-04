@@ -10,7 +10,7 @@
         <div class="member">
             {% for member in members %}
             {% if not member == community.owner %}
-            {{ member.username }} -> <a href="{% url 'kick' community.name member.id %}">Kick</a>  |  <a href="">Ban</a> <br>
+            {{ member.username }} -> <a href="{% url 'kick' community.name member.id %}">Kick</a> <br>
             {% endif %}
         {% endfor %}
         </div>
