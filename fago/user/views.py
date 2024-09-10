@@ -53,10 +53,14 @@ def login_user(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password = password)
-            login(request, user)
 
-            messages.success(request, "Logged In!")
-            return redirect('user_profile')
+            if user is not None:
+                login(request, user)
+                messages.success(request, "Logged In!")
+                return redirect('user_profile')
+            else:
+                messages.error(request, "Invalid username or password, please try again!")
+                return redirect('login')
     else:
         form = UserLoginForm()
     

@@ -5,7 +5,7 @@
         {% if comment.comment_author == comment.post.author %}
         <span class="comment-author">{{ comment.comment_author.first_name }} <span class="special">Author</span></span>
         {% else %}
-        <span class="comment-author">{{ comment.comment_author }}</span>
+        <span class="comment-author">{{ comment.comment_author.first_name }}</span>
         {% endif %}
         <span class="comment-date">{{ comment.comment_at|naturaltime }}</span>
     </div>

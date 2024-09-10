@@ -18,24 +18,9 @@
                 <button type="submit">Search</button>
             </form>
             {% if user.is_authenticated %}
-            <div class="nav-right">
-                <div class="notifications">
-                    <button id="notificationBtn" class="btn-icon"><i class="fas fa-bell"></i></button>
-                    <div id="notificationBox" class="notification-box">
-                        <h3>Notifications</h3>
-                        <ul>
-                            {% for notification in user.notifications.all reversed %}
-                            <li>
-                                {% load humanize %}
-                                <strong><a href="" class="hi">{{ notification.notification_from }}</a></strong> replied to your post <br><a href="{% url 'notification' notification.id %}" class="hi">View</a> <a href="{% url 'delete-notification' notification.id %}?next={{ request.get_full_path }}" class="hi">Delete</a>
-                                <span class="notification-time">{{ notification.time|naturaltime }}</span>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-            </div>
             <a href="{% url 'create-post' %}">Post</a>
             <a href="{% url 'user_profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
             {% else %}
             <a href="{% url 'login' %}">Login</a>
             {% endif %}

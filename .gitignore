@@ -4,3 +4,4 @@ fago/media/
 media/
 staticfiles/
 db.sqlite3
+env/
