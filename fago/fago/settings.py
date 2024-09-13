@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'posts.apps.PostsConfig',
     'user.apps.UserConfig',
     'communities.apps.CommunitiesConfig',
+    'api.apps.ApiConfig',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
