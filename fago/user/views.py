@@ -1,3 +1,4 @@
+from typing import Any
 from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm, UserLoginForm, EditProfileForm
 from .models import UserProfile
@@ -6,6 +7,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from posts.models import Post
+
+from django.views.generic import DetailView
 
 # Create your views here.
 
@@ -33,7 +36,8 @@ def register_user(request):
         form = UserRegistrationForm(request.POST)
         #checks if the form is valid
         if form.is_valid():
-            form.save()
+            user = form.save()
+            UserProfile.objects.create(user=user)
             messages.success(request, "Account Created!")
             return redirect('login')
     else:
@@ -106,3 +110,16 @@ def edit_user_profile(request):
     }
 
     return render(request,'user/edit_profile.html', context=context)
+
+# user profile view
+class UserProfileView(DetailView):
+    model = User
+    template_name = 'user/oth_profile.html'
+    context_object_name = 'user'
+
+    # method used to overwrite what will be sent in the context
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['user_posts'] = Post.objects.filter(author=self.object)
+        context['user_communities'] = self.object.communities.all()
+        return context
