@@ -7,21 +7,29 @@ from django.contrib.auth.models import User
 # from django.utils.decorators import method_decorator
 
 # serializer import
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserRegistrationSerializer
 
-# @method_decorator(csrf_exempt, name='dispatch')
-class UsersEndpoint(APIView):
+class UsersView(APIView):
     def get(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
     
-    # def post(self,request):
-    #     serializer = UserSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response('User account created', status=status.HTTP_201_CREATED)
-    #     return Response('Failed to created account', status=status.HTTP_400_BAD_REQUEST)
+    def post(self,request):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response('User account created', status=status.HTTP_201_CREATED)
+        return Response('Failed to created account', status=status.HTTP_400_BAD_REQUEST)
+
+class RegisterUsersView(APIView):
+    def post(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response(f'User {user.username} created', status=status.HTTP_201_CREATED)
+        return Response('Failed to created account', status=status.HTTP_400_BAD_REQUEST)
+        
     
 class UserEndpoint(APIView):
     def get(self, request, id):
