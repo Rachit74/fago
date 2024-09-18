@@ -21,14 +21,6 @@ class UsersView(APIView):
             serializer.save()
             return Response('User account created', status=status.HTTP_201_CREATED)
         return Response('Failed to created account', status=status.HTTP_400_BAD_REQUEST)
-
-class RegisterUsersView(APIView):
-    def post(self, request):
-        serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            return Response(f'User {user.username} created', status=status.HTTP_201_CREATED)
-        return Response('Failed to created account', status=status.HTTP_400_BAD_REQUEST)
         
     
 class UserEndpoint(APIView):
