@@ -1,5 +1,7 @@
 from typing import Any
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from .forms import UserRegistrationForm, UserLoginForm, EditProfileForm
 from .models import UserProfile
 from django.contrib.auth.models import User
@@ -9,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from posts.models import Post
 
 from django.views.generic import DetailView
+from django.views.generic.edit import FormView
 
 # Create your views here.
 
@@ -28,50 +31,43 @@ def user_profile(request):
 
     return render(request, 'user/profile.html', context=context)
 
-# User Registration
-def register_user(request):
-    # condition to check the type of request by the client
-    if request.method == "POST":
-        # get the user form data that was posted
-        form = UserRegistrationForm(request.POST)
-        #checks if the form is valid
-        if form.is_valid():
-            user = form.save()
-            UserProfile.objects.create(user=user)
-            messages.success(request, "Account Created!")
-            return redirect('login')
-    else:
-        form = UserRegistrationForm()
+# Register User
+class UserRegisterView(FormView):
+    template_name = 'user/register.html'
+    form_class = UserRegistrationForm
 
-    context = {
-        'form':form
-    }
-    return render(request, 'user/register.html', context=context)
+    def get_success_url(self):
+        return reverse('user_profile')
+
+    def form_valid(self, form: Any):
+        user = form.save()
+        UserProfile.objects.create(user=user)
+        messages.success(self.request, "Account Created!")
+        return HttpResponseRedirect(self.get_success_url())
+
+
+
 
 # User Login
-def login_user(request):
-    # check the type of request
-    if request.method == "POST":
-        form = UserLoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password = password)
+class LoginUserView(FormView):
+    template_name = 'user/login.html'
+    form_class = UserLoginForm
 
-            if user is not None:
-                login(request, user)
-                messages.success(request, "Logged In!")
-                return redirect('user_profile')
-            else:
-                messages.error(request, "Invalid username or password, please try again!")
-                return redirect('login')
-    else:
-        form = UserLoginForm()
-    
-    context = {
-        'form': form
-    }
-    return render(request, 'user/login.html', context=context)
+    def get_success_url(self):
+        return reverse('user_profile')
+
+    # form valid function
+    def form_valid(self, form: Any):
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(self.request, user=user)
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return self.form_invalid(form=form)
+
 
 # User Logout
 def logout_user(request):

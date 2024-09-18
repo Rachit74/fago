@@ -7,7 +7,6 @@
 <main class="container">
   <div class="profile">
       <div class="profile-header">
-        {{ user.id }}
         {% if user.userprofile.profile_picture %}
           <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
         {% else %}
