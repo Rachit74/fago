@@ -19,21 +19,6 @@ def get_posts(request):
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
 
-
-class LoginView(APIView):
-
-    # handle post request
-    def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(username=username, password=password)
-
-        if not user is None:
-            login(request, user)
-            return Response({"detail": "Successfully logged in."}, status=status.HTTP_200_OK)
-        
-        return Response({"detail": "Invalid credentials."}, status=status.HTTP_401_UNAUTHORIZED)
-
 # api only authentication users can hit
 class PostDetailView(APIView):
     permission_classes = [IsAuthenticated]
