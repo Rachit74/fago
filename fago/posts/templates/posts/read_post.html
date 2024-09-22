@@ -18,6 +18,36 @@
         <div class="post-content">
             <p>{{ post.content|linebreaksbr }}</p>
         </div>
+
+        <div class="d-flex flex-row">
+
+            <form action="{% url 'post-like' post.id %}" method="POST" class="like-form">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{request.path}}">
+              <button class="background-color:transparent; border:none; box-shadow:none;" style="background-color: transparent; border: none; box-shadow: none;" type="submit" name="post_id" value="{{ post.id }}">
+              {% if user not in post.likes.all %}
+                <i class="far fa-thumbs-up" id="like-count-{{ post.id }}" style="margin-right: 2rem;">
+              {% else %}
+                <i class="fa-solid fa-thumbs-up" id="like-count-{{ post.id }}" style="margin-right: 2rem;"> 
+              {% endif %}
+                <span>{{ post.likes.all.count }}</span></i>
+              </button>
+            </form>
+    
+            <form action="{% url 'post-dislike' post.id %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{request.path}}">
+              <button class="background-color:transparent; border:none; box-shadow:none;" style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+            {% if user not in post.dislikes.all %}
+                <i class="far fa-thumbs-down" id="js-dilike-button" data-post-id="{{ post.pk }}"> 
+              {% else %}
+              <i class="fa-solid fa-thumbs-down" id="js-dilike-button" data-post-id="{{ post.pk }}"> 
+              {% endif %}
+              <span>{{ post.dislikes.all.count }}</span></i>
+              </button>
+            </form>
+          </div>
+        </div>
     </article>
 
     <section class="comments">
