@@ -74,59 +74,49 @@ class ReadPostView(FormView):
         comment.post = post
         comment.save()
 
-        notification = Notification.objects.create(notification_type=2, from_user=self.request.user, to_user=post.author, post=post)
+        notification = Notification.objects.create(
+           notification_type=2, 
+           from_user=self.request.user, 
+           to_user=post.author, 
+           post=post)
 
         messages.success(self.request, "Comment Added!")
         return redirect('read-post',post_id=post.id)
     
 
 
-class PostLikeView(View):
-  def post(self, request, post_id, *args, **kwargs):
-    post = Post.objects.get(pk=post_id)
-    
-    is_dislike = False
-    for dislike in post.dislikes.all():
-      if dislike == request.user:
-        post.dislikes.remove(request.user)
-        break
-    is_like = False
-    for like in post.likes.all():
-      if like == request.user:
-        is_like = True
-        break
-    if not is_like:
-      post.likes.add(request.user)
-      notification = Notification.objects.create(notification_type=1, from_user=request.user, to_user=post.author, post=post)
-    
-    if is_like:
-      post.likes.remove(request.user)
+class PostLikeView(LoginRequiredMixin, View):
+  def post (self, request, post_id, *args, **kwargs):
+    post = get_object_or_404(Post, pk=post_id)
+    user = request.user
 
-    next = request.POST.get('next')
-    return HttpResponseRedirect(next, '/')
-
-class PostDislikeView(View):
-  def post(self, request, post_id, *args, **kwargs):
-    post = Post.objects.get(pk=post_id)
-
-    is_like = False
-    for like in post.likes.all():
-      if like == request.user:
-        post.likes.remove(request.user)
-        break
-    is_dislikes = False
-    for dislike in post.dislikes.all():
-      if dislike == request.user:
-        is_dislikes = True
-        break
-    if not is_dislikes:
-      post.dislikes.add(request.user)
-    if is_dislikes:
+    if user in post.likes.all():
+      post.likes.remove(user)
+    if user in post.dislikes.all():
       post.dislikes.remove(request.user)
+      post.likes.add(user)
+      notification = Notification.objects.create(
+         notification_type=2, 
+         from_user=self.request.user, 
+         to_user=post.author, 
+         post=post)
+      
+    next = request.POST.get('next')
+    return HttpResponseRedirect(next)
+
+class PostDislikeView(LoginRequiredMixin, View):
+  def post(self, request, post_id, *args, **kwargs):
+    post = get_object_or_404(Post, pk=post_id)
+    user = request.user
+
+    if user in post.dislikes.all():
+      post.dislikes.remove(user)
+    if user in post.likes.all():
+      post.likes.remove(user)
+      post.dislikes.add(user)
 
     next = request.POST.get('next')
-    return HttpResponseRedirect(next, '/')
-
+    return HttpResponseRedirect(next)
 
     
 class PostNotificationView(View):
