@@ -1,15 +1,17 @@
 from typing import Any
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
+import json
 # Form Imports
 from .forms import CreatePostForm, CommentForm
 
 # Model imports
-from .models import Post, Comment
+from .models import Post, Comment, Notification
 from communities.models import Community
 from django.contrib.auth.models import User
+from user.models import UserProfile
 from django.db.models import Q
 
 # Decorators import
@@ -61,6 +63,7 @@ class ReadPostView(FormView):
         context['comments'] = comments
         return context
     
+    
     def form_valid(self, form: Any):
         if not self.request.user.is_authenticated:
             return redirect('login')
@@ -70,8 +73,76 @@ class ReadPostView(FormView):
         comment.comment_author = self.request.user
         comment.post = post
         comment.save()
+
+        notification = Notification.objects.create(
+           notification_type=2, 
+           from_user=self.request.user, 
+           to_user=post.author, 
+           post=post)
+
         messages.success(self.request, "Comment Added!")
         return redirect('read-post',post_id=post.id)
+    
+
+
+class PostLikeView(LoginRequiredMixin, View):
+  def post (self, request, post_id, *args, **kwargs):
+    post = get_object_or_404(Post, pk=post_id)
+    user = request.user
+
+    if user in post.likes.all():
+      post.likes.remove(user)
+    if user in post.dislikes.all():
+      post.dislikes.remove(request.user)
+      post.likes.add(user)
+      notification = Notification.objects.create(
+         notification_type=2, 
+         from_user=self.request.user, 
+         to_user=post.author, 
+         post=post)
+      
+    next = request.POST.get('next')
+    return HttpResponseRedirect(next)
+
+class PostDislikeView(LoginRequiredMixin, View):
+  def post(self, request, post_id, *args, **kwargs):
+    post = get_object_or_404(Post, pk=post_id)
+    user = request.user
+
+    if user in post.dislikes.all():
+      post.dislikes.remove(user)
+    if user in post.likes.all():
+      post.likes.remove(user)
+      post.dislikes.add(user)
+
+    next = request.POST.get('next')
+    return HttpResponseRedirect(next)
+
+    
+class PostNotificationView(View):
+    def get(self, request, notification_id, post_id, *args, **kwargs):
+        notification = Notification.objects.get(pk=notification_id)
+        post = Post.objects.get(pk=post_id)
+
+        notification.user_has_seen = True
+        notification.save()
+        return redirect('read-post', post_id=post.id)
+
+class CommentNotificationView(View):
+    def get(self, request, notification_id, comment_id, *args, **kwargs):
+        notification = Notification.objects.get(pk=notification_id)
+        comment = Comment.objects.get(pk=comment_id)
+
+        notification.user_has_seen = True
+        notification.save()
+        return redirect('read-post', _id=comment.id)
+
+class RemoveNotification(View):
+    def delete(self, request, notification_id, *args, **kwargs):
+        notification = Notification.objects.get(pk=notification_id)
+        notification.user_has_seen = True
+        notification.save()
+        return HttpResponse('success', content_type='text/plain')
 
 # delete post
 @login_required
@@ -120,7 +191,8 @@ class CommentReplyView(LoginRequiredMixin, FormView):
         reply.save()
 
         messages.success(self.request, "Reply Added!")
-        return redirect('read-post', post_id=self.post.id)
+        return redirect(reverse('read-post', kwargs={'post_id': self.post.id}))
+        
 
 class Search(View):
     """
@@ -129,9 +201,9 @@ class Search(View):
     def get(self, request):
         query = self.request.GET.get('query', '')
 
-        users = User.objects.filter(Q(username__contains=query))
-        posts = Post.objects.filter(Q(title__contains=query) | Q(content__contains=query))
-        communities = Community.objects.filter(Q(name__contains=query))
+        users = User.objects.filter(Q(username__icontains=query))
+        posts = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
+        communities = Community.objects.filter(Q(name__icontains=query))
 
         context = {
                 'users':users,

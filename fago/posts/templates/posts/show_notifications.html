@@ -1,0 +1,23 @@
+<div class="dropdown"></div>
+  <span class="badge bg-primary notification-badge" onclick="showNotifications()" style="margin-right: 20rem;">{{ notifications.count }}
+    <i class="fa-regular fa-bell"></i>
+  </span>
+  <div class="dropdown-content d-none" id="notification-container">
+    {% for notification in notifications %}
+      {% if notification.post %}
+        {% if notification.notification_type == 1 %}
+          <div class="dropdown-item-parent">
+            <a href="{% url 'post-notification' notification.pk notification.post.pk %}">@{{ notification.from_user }} Liked your post.</a>
+            <span class="dropdown-item-close" onclick="removeNotification(`{% url 'notification-delete' notification.pk %}`, `{{ request.path }}`)">&times;</span>
+
+          </div>
+          {% elif notification.notification_type == 2 %}
+          <div class="dropdown-item-paren">
+            <a href="{% url 'post-notification' notification.pk notification.post.pk %}">@{{ notification.from_user }} commented on your post</a>
+            <span class="dropdown-item-close" onclick="removeNotification(`{% url 'notification-delete' notification.pk %}`, `{{ request.path }}`)">&times;</span>
+          </div>
+        {% endif %}  
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
