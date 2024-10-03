@@ -27,12 +27,20 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_ALL_ORIGINS = False  # Ensure wildcard is not allowed
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',  # Frontend origin for development
+    'https://b9413f13-38dd-4173-8b01-4f25a860cb83-00-3ka7vl8hhg4q9.pike.replit.dev'  # Repl development origin
+]
+
 CSRF_TRUSTED_ORIGINS = [
-    # requried when working on repl
+    'http://localhost:5173',
     'https://b9413f13-38dd-4173-8b01-4f25a860cb83-00-3ka7vl8hhg4q9.pike.replit.dev'
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
